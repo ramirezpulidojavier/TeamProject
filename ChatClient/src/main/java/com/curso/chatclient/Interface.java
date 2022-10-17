@@ -4,6 +4,7 @@
  */
 package com.curso.chatclient;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -16,10 +17,12 @@ public class Interface {
     /**
      * Method used for all inputs and outputs.
      */
-    public void run() {
+    public void run() throws IOException {
         boolean running = true;
         Scanner sc = new Scanner(System.in);
         String msg = null;
+        Client sender = new Client();
+        Connection conct = new Connection();
 
         System.out.println("Welcome to T-Sysgram.");
 
@@ -32,6 +35,8 @@ public class Interface {
             }
             if (msg.toLowerCase().equals("exit")) {
                 running = false;
+            } else {
+                sender.SendMessage(msg, conct.connect());
             }
 
         }
