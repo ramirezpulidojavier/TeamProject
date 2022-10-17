@@ -5,13 +5,8 @@
 package com.curso.chatclient;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,13 +30,8 @@ public class Connection {
         return port;
     }
     
-    //private PrintWriter out;
-    //private BufferedReader in;
-    //ServerSocket serverSocket;
     /**
-     * @param host default host
-     * @param port default port
-     * Default Cosntructor it assign the default host and port
+     * Default Constructor it assign the default host and port
      */
     public Connection(){
         host="192.168.3.215";
