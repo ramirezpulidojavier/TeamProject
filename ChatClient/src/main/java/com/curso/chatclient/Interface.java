@@ -4,10 +4,44 @@
  */
 package com.curso.chatclient;
 
+import java.io.IOException;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
- * @author jramir14
+ * @author josemrm30
  */
 public class Interface {
-    
+
+    /**
+     * Method used for all inputs and outputs.
+     */
+    public void run() throws IOException {
+        boolean running = true;
+        Scanner sc = new Scanner(System.in);
+        String msg = null;
+        Client sender = new Client();
+        Connection conct = new Connection();
+
+        System.out.println("Welcome to T-Sysgram.");
+
+        while (running) {
+            System.out.println("Introduce your message.\n'exit' for end the application.");
+            try {
+                msg = sc.nextLine();
+            } catch (NoSuchElementException e) {
+                System.err.println(e);
+                Logger.getLogger(e.getMessage()).log(Level.SEVERE,null, e);
+            }
+            if (msg.toLowerCase().equals("exit")) {
+                running = false;
+            } else {
+                sender.sendMessage(msg, conct.connect());
+            }
+
+        }
+    }
 }
