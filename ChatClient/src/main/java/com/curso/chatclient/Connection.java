@@ -4,6 +4,9 @@
  */
 package com.curso.chatclient;
 
+import java.io.IOException;
+import java.net.Socket;
+
 /**
  *
  * @author jramir14
