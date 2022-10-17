@@ -7,6 +7,8 @@ package com.curso.chatclient;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,6 +34,7 @@ public class Interface {
                 msg = sc.nextLine();
             } catch (NoSuchElementException e) {
                 System.err.println(e);
+                Logger.getLogger(e.getMessage()).log(Level.SEVERE,null, e);
             }
             if (msg.toLowerCase().equals("exit")) {
                 running = false;
