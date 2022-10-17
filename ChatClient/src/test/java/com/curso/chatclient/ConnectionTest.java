@@ -36,5 +36,24 @@ public class ConnectionTest {
         
         // EXPECT
         assertEquals(new Socket("google.com", 80), clientSocket);
-    }    
+    }
+    
+    /**
+    * Test of close client socket with server host and server port.
+    * Recently, host is google.com and port is 80
+    */
+    @Test
+    public void testCloseConnection() {
+        // GIVEN
+        System.out.println("Close Connection Test");
+        // Change variables host and port with real host and port
+        Connection newConnection = new Connection("google.com", 80);
+        Socket clientSocket = newConnection.connect();
+        
+        // THEN
+        boolean res = newConnection.close(clientSocket);
+        
+        // EXPECT
+        assertEquals(true, res);
+    }
 }
