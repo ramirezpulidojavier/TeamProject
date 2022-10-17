@@ -13,19 +13,19 @@ import java.net.Socket;
 
 /**
  *
- * @author jramir14
+ * @author pcorrales2010
  */
 public class Client {
 
     public Client() {
     }
 
-    public void SendMessage(String message, Socket socket) throws IOException {
+    public void sendMessage(String message, Socket socket) throws IOException {
         PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
         writer.println(message);
     }
 
-    public String GetMessage(Socket socket) throws IOException {
+    public String getMessage(Socket socket) throws IOException {
         InputStream input = socket.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         String line = reader.readLine();
