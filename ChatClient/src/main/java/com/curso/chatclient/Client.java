@@ -10,7 +10,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.time.LocalDateTime;
+
 
 /**
  * Class Client with the methods: sendMessage and getMessage
@@ -18,32 +21,48 @@ import java.time.LocalDateTime;
  */
 public class Client {
 
-    public Client() {
+    Socket mySocket;
+    PrintWriter myWriter;
+    BufferedReader myReader;
+
+    public Client(Socket newSocket) {
+        mySocket = newSocket;
+        try {
+            myWriter = new PrintWriter(newSocket.getOutputStream(), true);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        InputStream input;
+        try {
+            input = mySocket.getInputStream();
+            myReader = new BufferedReader(new InputStreamReader(input));
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+
+    public Client(Socket newSocket, PrintWriter newWriter, BufferedReader newReader) {
+        mySocket = newSocket;
+        myWriter = newWriter;
+        myReader = newReader;
+    }
     /**
      * Send the message and current date from client to server
      * @param message The message to send to server
-     * @param socket Server's socket
      * @throws IOException
      */
-    public void sendMessage(String message, Socket socket) throws IOException {
-        LocalDateTime date = LocalDateTime.now();  
-        message = message + " " + date.toString();
-        PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-        writer.println(message);
+    public void sendMessage(String message) throws IOException {
+        myWriter.println(message);
     }
-
+    
     /**
      * Get the message from server
-     * @param socket Server's socket
      * @return Message sent by server
      * @throws IOException
      */
-    public String getMessage(Socket socket) throws IOException {
-        InputStream input = socket.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        String line = reader.readLine();
+    public String getMessage() throws IOException {
+        String line = myReader.readLine();
         return line;
     }
 
