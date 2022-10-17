@@ -9,26 +9,29 @@ import java.util.Scanner;
 
 /**
  *
- * @author jramir14
+ * @author josemrm30
  */
 public class Interface {
 
+    /**
+     * Method used for all inputs and outputs.
+     */
     public void run() {
         boolean running = true;
         Scanner sc = new Scanner(System.in);
-        String msg;
+        String msg = null;
 
         System.out.println("Welcome to T-Sysgram.");
 
         while (running) {
+            System.out.println("Introduce your message.\n'exit' for end the application.");
             try {
-                System.out.println("Introduce your message.\n'exit' for end the application.");
-                msg = sc.next();
-                if(msg.equals("exit")){
-                    running = false;
-                }
+                msg = sc.nextLine();
             } catch (NoSuchElementException e) {
                 System.err.println(e);
+            }
+            if (msg.toLowerCase().equals("exit")) {
+                running = false;
             }
 
         }
