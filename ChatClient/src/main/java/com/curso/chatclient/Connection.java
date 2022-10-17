@@ -46,11 +46,11 @@ public class Connection {
     }
     
     public Socket connect(){
-        Socket clientSocket;
+        Socket clientSocket = null;
         
         try {
             
-             clientSocket = new Socket(host, port);
+             clientSocket = new Socket(getHost(), getPort());
             
              //out = new PrintWriter(clientSocket.getOutputStream(), true);
              //in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -61,9 +61,19 @@ public class Connection {
         } catch (IOException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return clientSocket= n;
+       return clientSocket;
             
         
+    }
+    public void close(Socket socket){
+        if (socket!=null) {
+            try {
+                socket.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
     }
     
 }
