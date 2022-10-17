@@ -14,23 +14,27 @@ import java.util.logging.Logger;
  * @author gruiztal
  */
 public class ListenThread extends Thread {
+
     Client client = new Client();
-    
-    public void run(Socket socket){
-        
-        while (true) {            
-            
+    Socket sock;
+
+    public ListenThread(Socket soc) {
+        this.sock = soc;
+    }
+
+    public void run() {
+
+        while (true) {
+
             try {
-                System.out.println(client.getMessage(socket));
+                System.out.println(client.getMessage(sock));
                 //client.getMessage(socket);
-                
-                
+
             } catch (IOException ex) {
                 Logger.getLogger(ListenThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    
-    
+
     }
-    
+
 }
