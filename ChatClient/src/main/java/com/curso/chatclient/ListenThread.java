@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  *
  * @author gruiztal
  */
-public class ListenThread {
+public class ListenThread extends Thread {
     Client client = new Client();
     
     public void run(Socket socket){
