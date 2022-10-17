@@ -10,11 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Class Client with the methods: sendMessage and getMessage
@@ -26,8 +22,8 @@ public class Client {
     }
 
     /**
-     * Method 
-     * @param message The string you want to sent + current date
+     * Send the message and current date from client to server
+     * @param message The message to send to server
      * @param socket Server's socket
      * @throws IOException
      */
@@ -39,8 +35,8 @@ public class Client {
     }
 
     /**
-     *  Method
-     * @param socket
+     * Get the message from server
+     * @param socket Server's socket
      * @return Message sent by server
      * @throws IOException
      */
