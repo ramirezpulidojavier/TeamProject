@@ -4,6 +4,7 @@
  */
 package com.curso.chatclient;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,8 +44,8 @@ public class Connection {
      * Default Cosntructor it assign the default host and port
      */
     public Connection(){
-        host="localhost";
-        port=4444;
+        host="192.168.3.215";
+        port=8080;
     
     }
     

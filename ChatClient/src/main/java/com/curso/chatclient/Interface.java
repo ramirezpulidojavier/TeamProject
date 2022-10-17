@@ -39,7 +39,7 @@ public class Interface {
             if (msg.toLowerCase().equals("exit")) {
                 running = false;
             } else {
-                sender.SendMessage(msg, conct.connect());
+                sender.sendMessage(msg, conct.connect());
             }
 
         }
