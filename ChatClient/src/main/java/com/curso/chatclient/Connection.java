@@ -65,15 +65,17 @@ public class Connection {
             
         
     }
-    public void close(Socket socket){
+    public boolean close(Socket socket){
         if (socket!=null) {
             try {
                 socket.close();
+                return true;
             } catch (IOException ex) {
                 Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         }
+        return false;
     }
     
 }
