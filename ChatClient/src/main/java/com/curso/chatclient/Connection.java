@@ -36,9 +36,13 @@ public class Connection {
     //ServerSocket serverSocket;
     
     public Connection(){
+        host="";
+        port=4444;
     
     }
     public Connection(String host, int port){
+        this.host= host;
+        this.port=port;
     }
     
     public Socket connect(){
@@ -51,13 +55,13 @@ public class Connection {
              //out = new PrintWriter(clientSocket.getOutputStream(), true);
              //in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              
-             
+              return clientSocket;
              
             
         } catch (IOException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return clientSocket;
+       return clientSocket= n;
             
         
     }
