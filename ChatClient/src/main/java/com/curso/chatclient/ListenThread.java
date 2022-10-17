@@ -15,11 +15,10 @@ import java.util.logging.Logger;
  */
 public class ListenThread extends Thread {
 
-    Client client = new Client();
-    Socket sock;
+    Client client;
 
     public ListenThread(Socket soc) {
-        this.sock = soc;
+        this.client = new Client(soc);
     }
 
     public void run() {
@@ -27,7 +26,7 @@ public class ListenThread extends Thread {
         while (true) {
 
             try {
-                System.out.println(client.getMessage(sock));
+                System.out.println(client.getMessage());
                 //client.getMessage(socket);
 
             } catch (IOException ex) {

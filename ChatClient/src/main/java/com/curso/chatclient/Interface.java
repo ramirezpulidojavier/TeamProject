@@ -24,11 +24,10 @@ public class Interface {
         boolean running = true;
         Scanner sc = new Scanner(System.in);
         String msg = null;
-        Client sender = new Client();
         Connection conct = new Connection();
         Socket clientSocket = conct.connect();
+        Client sender = new Client(clientSocket);
         ListenThread listener = new ListenThread(clientSocket);
-
         System.out.println("Welcome to T-Sysgram.");
         listener.start();
 
@@ -44,7 +43,7 @@ public class Interface {
             if (msg.toLowerCase().equals("exit")) {
                 running = false;
             } else {
-                sender.sendMessage(msg, clientSocket);
+                sender.sendMessage(msg);
             }
 
         }
