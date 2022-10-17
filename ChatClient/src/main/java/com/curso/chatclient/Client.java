@@ -8,6 +8,6 @@ package com.curso.chatclient;
  *
  * @author jramir14
  */
-public class ClientConnection {
+public class Client {
     
 }
