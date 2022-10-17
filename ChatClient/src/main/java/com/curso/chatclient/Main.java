@@ -12,6 +12,7 @@ package com.curso.chatclient;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        Interface menu = new Interface();
+        menu.run();
     }
 }
