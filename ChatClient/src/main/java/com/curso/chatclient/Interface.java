@@ -22,8 +22,11 @@ public class Interface {
 
         while (running) {
             try {
-                System.out.println("Introduce your message.");
+                System.out.println("Introduce your message.\n'exit' for end the application.");
                 msg = sc.next();
+                if(msg.equals("exit")){
+                    running = false;
+                }
             } catch (NoSuchElementException e) {
                 System.err.println(e);
             }
