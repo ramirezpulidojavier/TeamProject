@@ -4,6 +4,8 @@
  */
 package com.curso.chatclient;
 
+import java.io.IOException;
+import java.net.Socket;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,8 +19,17 @@ public class ConnectionTest {
     }
 
     @Test
-    public void testSomeMethod() {
-        fail("The test case is a prototype.");
+    public void testGetConnection() throws IOException {
+        // GIVEN
+        System.out.println("Get Connection Test");
+        Connection newConnection = new Connection("google.com", 80);
+        Socket client = new Socket("google.com", 80);
+        
+        // THEN
+        
+        
+        // EXPECT
+    
     }
     
 }
