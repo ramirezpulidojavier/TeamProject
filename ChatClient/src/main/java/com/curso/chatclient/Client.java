@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,18 +19,40 @@ import java.net.Socket;
  */
 public class Client {
 
-    public Client() {
+    Socket mySocket;
+    PrintWriter myWriter;
+    BufferedReader myReader;
+
+    public Client(Socket newSocket) {
+        mySocket = newSocket;
+        try {
+            myWriter = new PrintWriter(newSocket.getOutputStream(), true);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        InputStream input;
+        try {
+            input = mySocket.getInputStream();
+            myReader = new BufferedReader(new InputStreamReader(input));
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    public void sendMessage(String message, Socket socket) throws IOException {
-        PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-        writer.println(message);
+    public Client(Socket newSocket, PrintWriter newWriter, BufferedReader newReader) {
+        mySocket = newSocket;
+        myWriter = newWriter;
+        myReader = newReader;
     }
 
-    public String getMessage(Socket socket) throws IOException {
-        InputStream input = socket.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        String line = reader.readLine();
+    public void sendMessage(String message) throws IOException {
+
+        myWriter.println(message);
+    }
+
+    public String getMessage() throws IOException {
+
+        String line = myReader.readLine();
         return line;
     }
 

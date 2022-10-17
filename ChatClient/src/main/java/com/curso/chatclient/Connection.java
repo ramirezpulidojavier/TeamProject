@@ -21,15 +21,9 @@ public class Connection {
     
     private String host="";
     private int port ;
+    private Socket mySocket;
 
-    public String getHost() {
-        return host;
-    }
 
-    public int getPort() {
-        return port;
-    }
-    
     /**
      * Default Constructor it assign the default host and port
      */
@@ -50,29 +44,35 @@ public class Connection {
     }
     
     
+    public Connection(Socket newSocket){
+        mySocket = newSocket;
+    }
+    
+    
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+    
+    
+    
     /**
      * 
      * @return Sockt that client is gonna use for the connection
      */
     public Socket connect(){
-        Socket clientSocket = null;
-        
-        try {
-            
-             clientSocket = new Socket(getHost(), getPort());
-            
-             //out = new PrintWriter(clientSocket.getOutputStream(), true);
-             //in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-             
-              return clientSocket;
-             
-            
-        } catch (IOException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+        if(mySocket==null){
+            try {
+                 mySocket = new Socket(getHost(), getPort());
+
+            } catch (IOException ex) {
+                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-       return clientSocket;
-            
-        
+       return mySocket;
     }
     
     /**
