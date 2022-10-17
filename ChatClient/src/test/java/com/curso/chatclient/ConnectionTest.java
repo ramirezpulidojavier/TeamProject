@@ -19,17 +19,18 @@ public class ConnectionTest {
     }
 
     @Test
-    public void testGetConnection() throws IOException {
-        // GIVEN
-        System.out.println("Get Connection Test");
-        Connection newConnection = new Connection("google.com", 80);
-        Socket client = new Socket("google.com", 80);
-        
-        // THEN
-        
-        
-        // EXPECT
-    
+    public void testGetConnection() {
+        try {
+            // GIVEN
+            System.out.println("Get Connection Test");
+            Connection newConnection = new Connection("google.com", 80);
+            Socket client = new Socket("google.com", 80);
+
+            // THEN
+            // EXPECT
+        } catch (IOException e) {
+        } catch (UnknownHostException e) {
+        }
     }
     
 }
