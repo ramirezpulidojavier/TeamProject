@@ -14,16 +14,23 @@ import java.util.logging.Logger;
  * @author gruiztal
  */
 public class ListenThread extends Thread {
-
+    boolean stop;
     Client client;
+
 
     public ListenThread(Socket soc) {
         this.client = new Client(soc);
+        this.stop = false; 
     }
+    
+    public void stopThread(){
+        this.stop = false;
+    }
+    
 
     public void run() {
 
-        while (true) {
+        while (this.stop) {
 
             try {
                 System.out.println(client.getMessage());
