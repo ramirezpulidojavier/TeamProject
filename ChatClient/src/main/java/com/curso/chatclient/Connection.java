@@ -21,6 +21,7 @@ public class Connection {
     private String host = "";
     private int port;
     private Socket mySocket;
+    private final static Logger LOGGER = Logger.getLogger(Connection.class.getName());
 
     /**
      * Default Constructor it assign the default host and port
@@ -63,10 +64,9 @@ public class Connection {
             try {
                 mySocket = new Socket(getHost(), getPort());
 
-            } catch (UnknownHostException ex1) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex1);
             } catch (SecurityException | IllegalArgumentException | IOException ex2) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex2);
+                //Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex2);
+                LOGGER.log(Level.FINE, ex2.toString(), ex2);
             }
 
         }
@@ -83,10 +83,9 @@ public class Connection {
             try {
                 socket.close();
                 return true;
-            } catch (UnknownHostException ex1) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex1);
             } catch (SecurityException | IllegalArgumentException | IOException ex2) {
-                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex2);
+                //Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex2);
+                LOGGER.log(Level.FINE, ex2.toString(), ex2);
             }
 
         }
