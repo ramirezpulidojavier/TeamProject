@@ -21,7 +21,7 @@ public class Connection {
     private String host = "";
     private int port;
     private Socket mySocket;
-    private final static Logger LOGGER = Logger.getLogger(Connection.class.getName());
+    private final static Logger LOGGERCONNECTION = Logger.getLogger(Connection.class.getName());
 
     /**
      * Default Constructor it assign the default host and port
@@ -64,9 +64,9 @@ public class Connection {
             try {
                 mySocket = new Socket(getHost(), getPort());
 
-            } catch (SecurityException | IllegalArgumentException | IOException ex2) {
-                //Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex2);
-                LOGGER.log(Level.FINE, ex2.toString(), ex2);
+            } catch (SecurityException | IllegalArgumentException | IOException ex) {
+                //Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGERCONNECTION.log(Level.FINE, ex.toString(), ex);
             }
 
         }
@@ -83,9 +83,9 @@ public class Connection {
             try {
                 socket.close();
                 return true;
-            } catch (SecurityException | IllegalArgumentException | IOException ex2) {
-                //Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex2);
-                LOGGER.log(Level.FINE, ex2.toString(), ex2);
+            } catch (SecurityException | IllegalArgumentException | IOException ex) {
+                //Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGERCONNECTION.log(Level.FINE, ex.toString(), ex);
             }
 
         }

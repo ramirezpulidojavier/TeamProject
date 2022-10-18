@@ -15,33 +15,44 @@ import java.util.logging.Logger;
  * @author gruiztal
  */
 public class ListenThread extends Thread {
-    boolean stop;
+
     Client client;
+    private final static Logger LOGGERTHREAD = Logger.getLogger(Client.class.getName());
+    boolean stop;
 
-
+    /**
+     * ListenThread constructor. It receives a socket of a new Client who is
+     * connected.
+     *
+     * @param newSocket
+     * @throws IOException
+     */
     public ListenThread(Socket soc) throws ClientException {
         this.client = new Client(soc);
-        this.stop = false; 
-    }
-    
-    public void stopThread(){
         this.stop = false;
     }
-    
 
+    /**
+     * Method for stopping execution of the thread.
+     */
+    public void stopThread() {
+        this.stop = false;
+    }
+
+    /**
+     * Run method which is listening to new messages from different users.
+     *
+     */
+    @Override
     public void run() {
 
         while (this.stop) {
-
             try {
                 System.out.println(client.getMessage());
-                //client.getMessage(socket);
-
-            } catch (IOException ex) {
-                Logger.getLogger(ListenThread.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClientException ex) {
+                LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
             }
         }
-
     }
 
 }

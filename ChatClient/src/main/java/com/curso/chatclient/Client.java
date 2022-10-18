@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class Client with the methods: sendMessage and getMessage
@@ -26,6 +28,7 @@ public class Client {
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
+    private final static Logger LOGGERCLIENT = Logger.getLogger(Client.class.getName());
 
     /**
      * Constructor that receive a Socket and fill myWriter and myReader private
@@ -50,7 +53,8 @@ public class Client {
             try {
                 myWriter = new PrintWriter(output, true);
                 input = mySocket.getInputStream();
-            } catch (IOException ex) {
+            } catch (SecurityException | IllegalArgumentException | IOException ex) {
+                LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
                 // Program logger
                 throw new ClientException("Error creating the input stream: The socket is closed, not connected or the input has been shutdown");
                 
@@ -97,6 +101,7 @@ public class Client {
         try {
             line = myReader.readLine();
         } catch (IOException ex) {
+            LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
             // Program logger
             throw new ClientException("Error reading line.");
         }
