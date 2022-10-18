@@ -11,8 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *Class that connects a Client to a Server
- * @author gruital
+ *Class that connects a Client to a Server.
+ * @author gruital.
  *
  * 
  */
@@ -24,7 +24,7 @@ public class Connection {
     private final static Logger LOGGERCONNECTION = Logger.getLogger(Connection.class.getName());
 
     /**
-     * Default Constructor it assign the default host and port
+     * Default Constructor it assign the default host and port.
      */
     public Connection() {
         host = "192.168.3.215";
@@ -33,10 +33,10 @@ public class Connection {
     }
 
     /**
-     * Constructor to change values of host and port
+     * Constructor to change values of host and port.
      *
-     * @param host
-     * @param port
+     * @param host.
+     * @param port.
      */
     public Connection(String host, int port) {
         this.host = host;
@@ -44,8 +44,8 @@ public class Connection {
     }
     
     /**
-     * Constructor to creare a new object given a socket 
-     * @param newSocket 
+     * Constructor to creare a new object given a socket .
+     * @param newSocket .
      */
 
     public Connection(Socket newSocket) {
@@ -53,24 +53,24 @@ public class Connection {
     }
 
     /**
-     * This method returns the values of host in the object
-     * @return host of the object
+     * This method returns the values of host in the object.
+     * @return host of the object.
      */
     public String getHost() {
         return host;
     }
 
     /**
-     * This method returns the values of port in the object
-     * @return port of the object
+     * This method returns the values of port in the object.
+     * @return port of the object.
      */
     public int getPort() {
         return port;
     }
 
     /**
-     *
-     * @return Sockt that client is gonna use for the connection
+     *this method connects the user with its socket to the server.
+     * @return Sockt that client is gonna use for the connection.
      */
     public Socket connect() {
         if (mySocket == null) {
@@ -88,8 +88,8 @@ public class Connection {
 
     /**
      *
-     * @param socket needed the socket yhat is going to be closed
-     * @return true if the socket was able to be closed
+     * @param socket needed the socket yhat is going to be closed.
+     * @return true if the socket was able to be closed.
      */
     public boolean close(Socket socket) {
         if (socket != null) {

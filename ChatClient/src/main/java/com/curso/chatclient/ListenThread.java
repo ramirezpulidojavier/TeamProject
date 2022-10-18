@@ -11,7 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ *Class that acts as Thread for the main class.
+ * this class just listens as a cliente with them socket and prints the messesages it gets
  * @author gruiztal
  */
 public class ListenThread extends Thread {
