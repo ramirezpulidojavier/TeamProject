@@ -17,7 +17,6 @@ public class ListenThread extends Thread {
 
     // CREATE LOGGER
     // private final Logger LOGGER = Logger.getLogger(Client.class.getName());
-    
     Client client;
 
     /**
@@ -37,9 +36,10 @@ public class ListenThread extends Thread {
     }
 
     /**
-     * 
-     * 
+     * Run method which is listening to new messages from different users.
+     *
      */
+    @Override
     public void run() {
         while (true) {
             try {
