@@ -50,6 +50,7 @@ public class Interface {
             }
             if (msg.toLowerCase().equals("exit")) {
                 running = false;
+                listener.stopThread();
             } else {
                 sender.sendMessage(msg);
             }
