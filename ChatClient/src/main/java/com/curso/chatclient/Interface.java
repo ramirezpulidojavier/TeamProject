@@ -4,6 +4,7 @@
  */
 package com.curso.chatclient;
 
+import com.curso.exceptions.ClientException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.NoSuchElementException;
@@ -28,7 +29,7 @@ public class Interface {
      * to end the loop pulse enter
      * 
      */
-    public void run() throws IOException {
+    public void run() throws IOException, ClientException {
         boolean running = true;
         Scanner sc = new Scanner(System.in);
         String msg = null;

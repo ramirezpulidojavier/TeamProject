@@ -8,6 +8,10 @@ package com.curso.exceptions;
  *
  * @author jramir14
  */
-public class ClientException {
+public class ClientException extends Exception {
+    
+    public ClientException(String message) {
+        super(message);
+    }
     
 }

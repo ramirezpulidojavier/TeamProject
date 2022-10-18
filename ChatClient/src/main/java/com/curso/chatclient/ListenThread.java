@@ -4,6 +4,7 @@
  */
 package com.curso.chatclient;
 
+import com.curso.exceptions.ClientException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -18,29 +19,6 @@ public class ListenThread extends Thread {
     Client client;
     private final static Logger LOGGERTHREAD = Logger.getLogger(Client.class.getName());
     boolean stop;
-    
-     /**
-     * ListenThread constructor. It receives a socket of a new Client who is
-     * connected.
-     *
-     * @param newSocket
-     * @throws IOException
-     */
-    public ListenThread(Socket soc) {
-        try {
-            this.client = new Client(soc);
-            this.stop = false; 
-        } catch (IOException ex) {
-            LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
-            throw ex;
-        }
-        
-    public void stopThread(){
-        this.stop = false;
-
-    // CREATE LOGGER
-    // private final Logger LOGGER = Logger.getLogger(Client.class.getName());
-    Client client;
 
     /**
      * ListenThread constructor. It receives a socket of a new Client who is
@@ -49,15 +27,18 @@ public class ListenThread extends Thread {
      * @param newSocket
      * @throws IOException
      */
-    public ListenThread(Socket newSocket) throws IOException {
-        try {
-            this.client = new Client(newSocket);
-        } catch (IOException ex) {
-            // Program logger
-            throw ex;
-        }
+    public ListenThread(Socket soc) throws ClientException {
+        this.client = new Client(soc);
+        this.stop = false;
     }
-    
+
+    /**
+     * Method for stopping execution of the thread.
+     */
+    public void stopThread() {
+        this.stop = false;
+    }
+
     /**
      * Run method which is listening to new messages from different users.
      *
@@ -68,7 +49,7 @@ public class ListenThread extends Thread {
         while (this.stop) {
             try {
                 System.out.println(client.getMessage());
-            } catch (IOException ex) {
+            } catch (ClientException ex) {
                 LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
             }
         }
