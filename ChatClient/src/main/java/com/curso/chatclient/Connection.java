@@ -11,10 +11,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ *Class that connects a Client to a Server
  * @author gruital
  *
- * Class that connects a Client to a Server
+ * 
  */
 public class Connection {
 
@@ -42,15 +42,28 @@ public class Connection {
         this.host = host;
         this.port = port;
     }
+    
+    /**
+     * Constructor to creare a new object given a socket 
+     * @param newSocket 
+     */
 
     public Connection(Socket newSocket) {
         mySocket = newSocket;
     }
 
+    /**
+     * This method returns the values of host in the object
+     * @return host of the object
+     */
     public String getHost() {
         return host;
     }
 
+    /**
+     * This method returns the values of port in the object
+     * @return port of the object
+     */
     public int getPort() {
         return port;
     }
