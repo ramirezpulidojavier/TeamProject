@@ -28,6 +28,7 @@ public class Client {
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
+    private final static Logger LOGGERCLIENT = Logger.getLogger(Client.class.getName());
 
     /**
      * Constructor that receive a Socket and fill myWriter and myReader private
@@ -53,7 +54,8 @@ public class Client {
             try {
                 myWriter = new PrintWriter(output, true);
                 input = mySocket.getInputStream();
-            } catch (IOException ex) {
+            } catch (SecurityException | IllegalArgumentException | IOException ex) {
+                LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
                 // Program logger
                 // if an I/O error occurs when creating the input stream,
                 // the socket is closed, the socket is not connected, or
@@ -101,6 +103,7 @@ public class Client {
         try {
             line = myReader.readLine();
         } catch (IOException ex) {
+            LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
             // Program logger
             throw ex;
         }
