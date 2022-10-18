@@ -18,8 +18,15 @@ import java.util.logging.Logger;
 public class Interface {
 
     private final static Logger LOGGERINTERFACE = Logger.getLogger(Interface.class.getName());
+    
     /**
      * Method used for all inputs and outputs.
+     * Defines the .start of this thread
+     * The Thread keeps reading the next input that we recive from the server 
+     * and prints the message that gets
+     * 
+     * to end the loop pulse enter
+     * 
      */
     public void run() throws IOException {
         boolean running = true;

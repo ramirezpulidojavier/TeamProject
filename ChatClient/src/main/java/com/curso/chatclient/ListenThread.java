@@ -16,11 +16,18 @@ import java.util.logging.Logger;
 public class ListenThread extends Thread {
 
     Client client;
+    private final static Logger LOGGERTHREAD = Logger.getLogger(Client.class.getName());
 
+    
     public ListenThread(Socket soc) {
-        this.client = new Client(soc);
+        try {
+            this.client = new Client(soc);
+        } catch (IOException ex) {
+            LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
+        }
     }
 
+    @Override
     public void run() {
 
         while (true) {
@@ -30,7 +37,7 @@ public class ListenThread extends Thread {
                 //client.getMessage(socket);
 
             } catch (IOException ex) {
-                Logger.getLogger(ListenThread.class.getName()).log(Level.SEVERE, null, ex);
+                LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
             }
         }
 
