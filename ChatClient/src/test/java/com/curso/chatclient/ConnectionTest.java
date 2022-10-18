@@ -24,7 +24,7 @@ public class ConnectionTest {
     * @throws IOException when 
     */
     @Test
-    public void testStartConnection() throws IOException {
+    public void testStartConnection() {
         // GIVEN
         System.out.println("Get Connection Test");
         Connection newConnection = new Connection();
