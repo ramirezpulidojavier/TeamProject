@@ -21,7 +21,7 @@ public class ConnectionTest {
     /**
     * Test of client socket connection with server host and server port.
     * 
-    * @throws IOException 
+    * @throws IOException when 
     */
     @Test
     public void testStartConnection() throws IOException {
