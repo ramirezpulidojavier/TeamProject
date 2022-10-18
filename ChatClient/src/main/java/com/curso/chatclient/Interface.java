@@ -17,6 +17,7 @@ import java.util.logging.Logger;
  */
 public class Interface {
 
+    private final static Logger LOGGERINTERFACE = Logger.getLogger(Interface.class.getName());
     /**
      * Method used for all inputs and outputs.
      */
@@ -38,7 +39,7 @@ public class Interface {
                 msg = sc.nextLine();
             } catch (NoSuchElementException e) {
                 System.err.println(e);
-                Logger.getLogger(e.getMessage()).log(Level.SEVERE, null, e);
+                LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
             }
             if (msg.toLowerCase().equals("exit")) {
                 running = false;
