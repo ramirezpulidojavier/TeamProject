@@ -4,6 +4,7 @@
  */
 package com.curso.chatclient;
 
+import com.curso.exceptions.ClientException;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ public class ListenThread extends Thread {
     Client client;
 
 
-    public ListenThread(Socket soc) {
+    public ListenThread(Socket soc) throws ClientException {
         this.client = new Client(soc);
         this.stop = false; 
     }
