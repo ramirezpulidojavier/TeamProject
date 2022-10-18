@@ -7,6 +7,10 @@ package com.curso.chatclient;
 import com.curso.exceptions.ClientException;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -19,15 +23,14 @@ import java.util.logging.Logger;
 public class Interface {
 
     private final static Logger LOGGERINTERFACE = Logger.getLogger(Interface.class.getName());
-    
+
     /**
-     * Method used for all inputs and outputs.
-     * Defines the .start of this thread
-     * The Thread keeps reading the next input that we recive from the server 
+     * Method used for all inputs and outputs. Defines the .start of this thread
+     * The Thread keeps reading the next input that we recive from the server
      * and prints the message that gets
-     * 
+     *
      * to end the loop pulse enter
-     * 
+     *
      */
     public void run() throws IOException, ClientException {
         boolean running = true;
@@ -57,5 +60,48 @@ public class Interface {
             }
 
         }
+    }
+
+    /**
+     * Get Secure Password that receives a password introduced by an user and a
+     * salt generation for hashing the user password.
+     *
+     * @param passwordToHash
+     * @param salt
+     * @return
+     */
+    public String getSecurePassword(String passwordToHash, String salt) {
+        String generatedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Add password bytes to digest
+            md.update(salt.getBytes());
+
+            // Get the hash's bytes
+            byte[] bytes = md.digest(passwordToHash.getBytes());
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+        }
+        return generatedPassword;
+    }
+
+    /**
+     *
+     * @return @throws NoSuchAlgorithmException
+     * @throws NoSuchProviderException
+     */
+    public String getSalt() throws NoSuchAlgorithmException, NoSuchProviderException {
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        return salt.toString();
     }
 }
