@@ -46,7 +46,7 @@ public class ListenThread extends Thread {
     @Override
     public void run() {
 
-        while (this.stop) {
+        while (!this.stop) {
             try {
                 System.out.println(client.getMessage());
             } catch (ClientException ex) {
