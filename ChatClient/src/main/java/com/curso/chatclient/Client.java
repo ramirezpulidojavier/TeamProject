@@ -14,9 +14,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.time.LocalDateTime;
 
-
 /**
  * Class Client with the methods: sendMessage and getMessage
+ *
  * @author pcorrales2010
  */
 public class Client {
@@ -41,23 +41,25 @@ public class Client {
         }
     }
 
-
     public Client(Socket newSocket, PrintWriter newWriter, BufferedReader newReader) {
         mySocket = newSocket;
         myWriter = newWriter;
         myReader = newReader;
     }
+
     /**
      * Send the message and current date from client to server
+     *
      * @param message The message to send to server
      * @throws IOException If an I/O error occurs
      */
     public void sendMessage(String message) throws IOException {
         myWriter.println(message);
     }
-    
+
     /**
      * Get the message from server
+     *
      * @return Message sent by server
      * @throws IOException If an I/O error occurs
      */
