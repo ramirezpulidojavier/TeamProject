@@ -17,6 +17,7 @@ public class ListenThread extends Thread {
 
     // CREATE LOGGER
     // private final Logger LOGGER = Logger.getLogger(Client.class.getName());
+    
     Client client;
 
     /**
