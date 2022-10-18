@@ -5,12 +5,12 @@
 package com.curso.chatclient;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,56 +18,79 @@ import static org.junit.Assert.*;
 
 import static org.mockito.Mockito.when;
 
-
-
 /**
  *
  * @author juacuadr
  */
 public class ClientTest {
+
+    // CREATE LOGGER
+    private static final Logger LOGGER = Logger.getLogger(Client.class.getName());
     
     public ClientTest() {
     }
 
     /**
-     * 
+     * Test of Send Message method by using Mockito.
+     *
+     * @throws IOException when an I/O error occurs.
      */
     @Test
-    public void testSendMessage() throws Exception {
+    public void testSendMessage() throws IOException {
         // GIVEN
-        
-        // Primero creamos el mock
         Socket testSocket = Mockito.mock(Socket.class);
         BufferedReader testReader = Mockito.mock(BufferedReader.class);
         PrintWriter testWriter = Mockito.mock(PrintWriter.class);
-        
-        
-        // Usamos el mock
+
         Client client = new Client(testSocket, testWriter, testReader);
-        
 
         // THEN
         client.sendMessage("This is my message");
 
         // EXPECT
         verify(testWriter, times(1)).println("This is my message");
-        verify(testReader, times(0)).readLine();
-    }    
-    
+
+        try {
+            verify(testReader, times(0)).readLine();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            throw ex;
+        }
+    }
+
+    /**
+     * Test of Get Message method by using Mockito.
+     * 
+     * @throws IOException 
+     */
     @Test
-    public void testGetMessage() throws Exception {
-            // Primero creamos el mock
+    public void testGetMessage() throws IOException {
+        // GIVEN
         Socket testSocket = Mockito.mock(Socket.class);
         BufferedReader testReader = Mockito.mock(BufferedReader.class);
         PrintWriter testWriter = Mockito.mock(PrintWriter.class);
-        
-        when(testReader.readLine()).thenReturn("cosica");
-        
-        // Usamos el mock
+
+        try {
+            // Mock behaviour
+            when(testReader.readLine()).thenReturn("cosica");
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            throw ex;
+        }
+
         Client client = new Client(testSocket, testWriter, testReader);
-        
-        String msg = client.getMessage();
+
+        // THEN
+        String msg;
+        try {
+            msg = client.getMessage();
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
+            throw ex;
+        }
+
+        // EXPECT
         assertEquals(msg, "cosica");
     }
-    
+
 }
