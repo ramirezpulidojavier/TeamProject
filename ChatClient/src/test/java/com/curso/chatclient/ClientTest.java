@@ -4,6 +4,7 @@
  */
 package com.curso.chatclient;
 
+import com.curso.exceptions.ClientException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -65,7 +66,7 @@ public class ClientTest {
      * @throws IOException 
      */
     @Test
-    public void testGetMessage() throws IOException {
+    public void testGetMessage() throws IOException, ClientException {
         // GIVEN
         Socket testSocket = Mockito.mock(Socket.class);
         BufferedReader testReader = Mockito.mock(BufferedReader.class);
@@ -83,12 +84,7 @@ public class ClientTest {
 
         // THEN
         String msg;
-        try {
-            msg = client.getMessage();
-        } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, ex.toString(), ex);
-            throw ex;
-        }
+        msg = client.getMessage();
 
         // EXPECT
         assertEquals(msg, "cosica");
