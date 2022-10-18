@@ -53,8 +53,6 @@ public class Client {
      * @throws IOException If an I/O error occurs
      */
     public void sendMessage(String message) throws IOException {
-        LocalDateTime date = LocalDateTime.now();
-        message = message + " " + date;
         myWriter.println(message);
     }
     
