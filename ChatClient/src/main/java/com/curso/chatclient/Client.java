@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -21,26 +22,58 @@ import java.time.LocalDateTime;
  */
 public class Client {
 
+    // CREATE LOGGER
+    // private final Logger LOGGER = Logger.getLogger(Client.class.getName());
+
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
 
-    public Client(Socket newSocket) {
-        mySocket = newSocket;
-        try {
-            myWriter = new PrintWriter(newSocket.getOutputStream(), true);
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        InputStream input;
-        try {
-            input = mySocket.getInputStream();
+    /**
+     * Constructor that receive a Socket and fill myWriter and myReader private
+     * variables.
+     *
+     * @param newSocket
+     * @throws IOException when an I/O error occurs.
+     */
+    public Client(Socket newSocket) throws IOException {
+        if (newSocket != null) {
+            mySocket = newSocket;
+            InputStream input;
+            OutputStream output;
+
+            try {
+                output = newSocket.getOutputStream();
+            } catch (IOException ex) {
+                // Program logger
+                // if an I/O error occurs when creating the output stream or if the socket is not connected
+                throw ex;
+            }
+
+            try {
+                myWriter = new PrintWriter(output, true);
+                input = mySocket.getInputStream();
+            } catch (IOException ex) {
+                // Program logger
+                // if an I/O error occurs when creating the input stream,
+                // the socket is closed, the socket is not connected, or
+                // the socket input has been shutdown using shutdownInput()
+                throw ex;
+            }
+            
             myReader = new BufferedReader(new InputStreamReader(input));
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
+
+    /**
+     * Parametrized constructor to inject variables. This constructor is being
+     * used into Test files.
+     *
+     * @param newSocket
+     * @param newWriter
+     * @param newReader
+     */
     public Client(Socket newSocket, PrintWriter newWriter, BufferedReader newReader) {
         mySocket = newSocket;
         myWriter = newWriter;
@@ -51,9 +84,8 @@ public class Client {
      * Send the message and current date from client to server
      *
      * @param message The message to send to server
-     * @throws IOException If an I/O error occurs
      */
-    public void sendMessage(String message) throws IOException {
+    public void sendMessage(String message) {
         myWriter.println(message);
     }
 
@@ -61,10 +93,18 @@ public class Client {
      * Get the message from server
      *
      * @return Message sent by server
-     * @throws IOException If an I/O error occurs
+     * @throws IOException if an I/O error occurs.
      */
     public String getMessage() throws IOException {
-        String line = myReader.readLine();
+        String line;
+        
+        try {
+            line = myReader.readLine();
+        } catch (IOException ex) {
+            // Program logger
+            throw ex;
+        }
+        
         return line;
     }
 
