@@ -24,6 +24,7 @@ import static org.mockito.Mockito.when;
  */
 public class ClientTest {
 
+
     // CREATE LOGGER
     private static final Logger LOGGER = Logger.getLogger(Client.class.getName());
     

@@ -15,9 +15,11 @@ import java.util.logging.Logger;
  */
 public class ListenThread extends Thread {
 
+
     // CREATE LOGGER
     // private final Logger LOGGER = Logger.getLogger(Client.class.getName());
     Client client;
+    boolean stop;
 
     /**
      * ListenThread constructor. It receives a socket of a new Client who is
@@ -29,11 +31,16 @@ public class ListenThread extends Thread {
     public ListenThread(Socket newSocket) throws IOException {
         try {
             this.client = new Client(newSocket);
+            this.stop = false; 
         } catch (IOException ex) {
             // Program logger
             throw ex;
         }
+    
+    public void stopThread(){
+        this.stop = false;
     }
+    
 
     /**
      * Run method which is listening to new messages from different users.
@@ -41,7 +48,8 @@ public class ListenThread extends Thread {
      */
     @Override
     public void run() {
-        while (true) {
+
+        while (this.stop) {
             try {
                 System.out.println(client.getMessage());
             } catch (IOException ex) {

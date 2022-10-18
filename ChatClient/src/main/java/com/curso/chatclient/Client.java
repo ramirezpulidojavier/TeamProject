@@ -65,6 +65,7 @@ public class Client {
         }
     }
 
+
     /**
      * Parametrized constructor to inject variables. This constructor is being
      * used into Test files.
