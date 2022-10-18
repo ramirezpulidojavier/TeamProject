@@ -50,7 +50,7 @@ public class Client {
     /**
      * Send the message and current date from client to server
      * @param message The message to send to server
-     * @throws IOException
+     * @throws IOException when input output error is detected.
      */
     public void sendMessage(String message) throws IOException {
         myWriter.println(message);
@@ -59,7 +59,7 @@ public class Client {
     /**
      * Get the message from server
      * @return Message sent by server
-     * @throws IOException
+     * @throws IOException when input output error is detected.
      */
     public String getMessage() throws IOException {
         String line = myReader.readLine();
