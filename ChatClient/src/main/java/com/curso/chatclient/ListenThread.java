@@ -37,6 +37,25 @@ public class ListenThread extends Thread {
         
     public void stopThread(){
         this.stop = false;
+
+    // CREATE LOGGER
+    // private final Logger LOGGER = Logger.getLogger(Client.class.getName());
+    Client client;
+
+    /**
+     * ListenThread constructor. It receives a socket of a new Client who is
+     * connected.
+     *
+     * @param newSocket
+     * @throws IOException
+     */
+    public ListenThread(Socket newSocket) throws IOException {
+        try {
+            this.client = new Client(newSocket);
+        } catch (IOException ex) {
+            // Program logger
+            throw ex;
+        }
     }
     
     /**

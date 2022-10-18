@@ -4,6 +4,7 @@
  */
 package com.curso.chatclient;
 
+import com.curso.exceptions.ClientException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +12,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.time.LocalDateTime;
 
 /**
  * Class Client with the methods: sendMessage and getMessage
@@ -35,9 +33,9 @@ public class Client {
      * variables.
      *
      * @param newSocket
-     * @throws IOException when an I/O error occurs.
+     * @throws ClientException when an I/O error occurs while creating the output/input stream.
      */
-    public Client(Socket newSocket) throws IOException {
+    public Client(Socket newSocket) throws ClientException {
         if (newSocket != null) {
             mySocket = newSocket;
             InputStream input;
@@ -47,8 +45,7 @@ public class Client {
                 output = newSocket.getOutputStream();
             } catch (IOException ex) {
                 // Program logger
-                // if an I/O error occurs when creating the output stream or if the socket is not connected
-                throw ex;
+                throw new ClientException("Error creating the output stream: the socket could not be connected");
             }
 
             try {
@@ -57,10 +54,9 @@ public class Client {
             } catch (SecurityException | IllegalArgumentException | IOException ex) {
                 LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
                 // Program logger
-                // if an I/O error occurs when creating the input stream,
-                // the socket is closed, the socket is not connected, or
-                // the socket input has been shutdown using shutdownInput()
-                throw ex;
+                throw new ClientException("Error creating the input stream: The socket is closed, not connected or the input has been shutdown");
+                
+                
             }
             
             myReader = new BufferedReader(new InputStreamReader(input));
@@ -95,9 +91,9 @@ public class Client {
      * Get the message from server
      *
      * @return Message sent by server
-     * @throws IOException if an I/O error occurs.
+     * @throws ClientException if an I/O error occurs when reading a line.
      */
-    public String getMessage() throws IOException {
+    public String getMessage() throws ClientException {
         String line;
         
         try {
@@ -105,7 +101,7 @@ public class Client {
         } catch (IOException ex) {
             LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
             // Program logger
-            throw ex;
+            throw new ClientException("Error reading line.");
         }
         
         return line;
