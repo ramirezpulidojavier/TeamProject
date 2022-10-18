@@ -5,13 +5,8 @@
 package com.curso.chatclient;
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,22 +21,11 @@ public class Connection {
     
     private String host="";
     private int port ;
+    private Socket mySocket;
 
-    public String getHost() {
-        return host;
-    }
 
-    public int getPort() {
-        return port;
-    }
-    
-    //private PrintWriter out;
-    //private BufferedReader in;
-    //ServerSocket serverSocket;
     /**
-     * @param host default host
-     * @param port default port
-     * Default Cosntructor it assign the default host and port
+     * Default Constructor it assign the default host and port
      */
     public Connection(){
         host="192.168.3.215";
@@ -60,29 +44,35 @@ public class Connection {
     }
     
     
+    public Connection(Socket newSocket){
+        mySocket = newSocket;
+    }
+    
+    
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+    
+    
+    
     /**
      * 
      * @return Sockt that client is gonna use for the connection
      */
     public Socket connect(){
-        Socket clientSocket = null;
-        
-        try {
-            
-             clientSocket = new Socket(getHost(), getPort());
-            
-             //out = new PrintWriter(clientSocket.getOutputStream(), true);
-             //in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-             
-              return clientSocket;
-             
-            
-        } catch (IOException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+        if(mySocket==null){
+            try {
+                 mySocket = new Socket(getHost(), getPort());
+
+            } catch (IOException ex) {
+                Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-       return clientSocket;
-            
-        
+       return mySocket;
     }
     
     /**

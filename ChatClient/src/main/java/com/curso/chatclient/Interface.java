@@ -5,6 +5,7 @@
 package com.curso.chatclient;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -23,23 +24,26 @@ public class Interface {
         boolean running = true;
         Scanner sc = new Scanner(System.in);
         String msg = null;
-        Client sender = new Client();
         Connection conct = new Connection();
-
+        Socket clientSocket = conct.connect();
+        Client sender = new Client(clientSocket);
+        ListenThread listener = new ListenThread(clientSocket);
         System.out.println("Welcome to T-Sysgram.");
+        listener.start();
 
         while (running) {
+
             System.out.println("Introduce your message.\n'exit' for end the application.");
             try {
                 msg = sc.nextLine();
             } catch (NoSuchElementException e) {
                 System.err.println(e);
-                Logger.getLogger(e.getMessage()).log(Level.SEVERE,null, e);
+                Logger.getLogger(e.getMessage()).log(Level.SEVERE, null, e);
             }
             if (msg.toLowerCase().equals("exit")) {
                 running = false;
             } else {
-                sender.sendMessage(msg, conct.connect());
+                sender.sendMessage(msg);
             }
 
         }
