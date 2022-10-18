@@ -19,41 +19,121 @@ import java.util.logging.Logger;
 public class Interface {
 
     private final static Logger LOGGERINTERFACE = Logger.getLogger(Interface.class.getName());
-    
+
     /**
-     * Method used for all inputs and outputs.
-     * Defines the .start of this thread
-     * The Thread keeps reading the next input that we recive from the server 
+     * Method used for all inputs and outputs.Defines the .start of this thread
+     * The Thread keeps reading the next input that we recive from the server
      * and prints the message that gets
-     * 
+     *
      * to end the loop pulse enter
-     * 
+     *
+     * @throws com.curso.exceptions.ClientException
      */
-    public void run() throws IOException, ClientException {
+    public void run() throws ClientException {
         boolean running = true;
         Scanner sc = new Scanner(System.in);
         String msg = null;
+
+        String ip;
+        String port;
+
+        System.out.println("Introduce hostname:");
+        ip = sc.nextLine();
+        System.out.println("Introduce port:");
+        port = sc.nextLine();
+        if(port.matches("[0-9]+")){
+        Connection conct = new Connection(ip, Integer.parseInt(port));
+        if (conct.hostAvailabilityCheck()) {
+            Socket clientSocket = conct.connect();
+
+            Client sender = new Client(clientSocket);
+            ListenThread listener = new ListenThread(clientSocket);
+            listener.start();
+            //runAuthentication();
+            while (running) {
+
+                System.out.println("Introduce your message.\n'exit' for end the application.");
+                try {
+                    msg = sc.nextLine();
+                } catch (NoSuchElementException e) {
+                    System.err.println(e);
+                    LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+                }
+                if (msg.toLowerCase().equals("exit")) {
+                    running = false;
+                    listener.stopThread();
+                } else {
+                    sender.sendMessage(msg);
+                }
+
+            }
+        } else {
+            System.out.println("Error: Server is not running.");
+        }    
+        }else{
+            System.out.println("Error: Incorrect port format ");
+        }
+        
+
+    }
+
+    /**
+     * Method used for all inputs and outputs.Defines the .start of this thread
+     * The Thread keeps reading the next input that we recive from the server
+     * and prints the message that gets
+     *
+     * to end the loop pulse enter
+     *
+     * @throws com.curso.exceptions.ClientException
+     */
+    public void runAuthentication() throws ClientException {
+        Scanner sc = new Scanner(System.in);
+        String username = "";
+        String password = "";
+        String serverAnswer = "";
+        String selectedOption = "";
         Connection conct = new Connection();
         Socket clientSocket = conct.connect();
-        Client sender = new Client(clientSocket);
-        ListenThread listener = new ListenThread(clientSocket);
+        Client senderReceiver = new Client(clientSocket);
         System.out.println("Welcome to T-Sysgram.");
-        listener.start();
 
-        while (running) {
+        while (!serverAnswer.equals("true")) {
 
-            System.out.println("Introduce your message.\n'exit' for end the application.");
+            System.out.println("Choose an option.\n'exit' for end the application.");
+            System.out.println("1. Sign up");
+            System.out.println("2. Log in");
+
             try {
-                msg = sc.nextLine();
+                selectedOption = sc.nextLine();
             } catch (NoSuchElementException e) {
                 System.err.println(e);
                 LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
             }
-            if (msg.toLowerCase().equals("exit")) {
-                running = false;
-                listener.stopThread();
-            } else {
-                sender.sendMessage(msg);
+
+            switch (selectedOption.toLowerCase()) {
+                case "1":
+                    System.out.print("Username: ");
+                    username = sc.nextLine();
+                    System.out.print("Password: ");
+                    password = sc.nextLine();
+                    senderReceiver.sendMessage("R");
+                    senderReceiver.sendMessage(username + "|" + password);
+                    serverAnswer = senderReceiver.getMessage();
+                    break;
+                case "2":
+                    System.out.print("Username: ");
+                    username = sc.nextLine();
+                    System.out.print("Password: ");
+                    password = sc.nextLine();
+                    senderReceiver.sendMessage("L");
+                    senderReceiver.sendMessage(username + "|" + password);
+                    serverAnswer = senderReceiver.getMessage();
+                    break;
+                case "exit":
+                    serverAnswer = "true";
+                    break;
+                default:
+                    System.out.println("Incorrect option");
             }
 
         }
