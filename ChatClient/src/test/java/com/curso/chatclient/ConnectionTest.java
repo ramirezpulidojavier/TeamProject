@@ -20,30 +20,34 @@ public class ConnectionTest {
     
     /**
     * Test of client socket connection with server host and server port.
+    * Recently, host is google.com and port is 80
     * 
-    * @throws IOException when 
+    * @throws IOException 
     */
     @Test
-    public void testStartConnection() {
+    public void testStartConnection() throws IOException {
         // GIVEN
         System.out.println("Get Connection Test");
-        Connection newConnection = new Connection();
+        // Change variables host and port with real host and port
+        Connection newConnection = new Connection("google.com", 80);
         
         // THEN
         Socket clientSocket = newConnection.connect();
         
         // EXPECT
-        assertNotNull(clientSocket);
+        assertEquals(new Socket("google.com", 80), clientSocket);
     }
     
     /**
     * Test of close client socket with server host and server port.
+    * Recently, host is google.com and port is 80
     */
     @Test
     public void testCloseConnection() {
         // GIVEN
         System.out.println("Close Connection Test");
-        Connection newConnection = new Connection();
+        // Change variables host and port with real host and port
+        Connection newConnection = new Connection("google.com", 80);
         Socket clientSocket = newConnection.connect();
         
         // THEN
