@@ -1,6 +1,0 @@
-com\curso\chatclient\Interface.class
-com\curso\chatclient\Main.class
-com\curso\chatclient\Client.class
-com\curso\chatclient\Connection.class
-com\curso\chatclient\ListenThread.class
-com\curso\exceptions\ClientException.class

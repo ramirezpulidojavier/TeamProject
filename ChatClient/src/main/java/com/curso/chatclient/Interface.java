@@ -37,6 +37,7 @@ public class Interface {
         boolean running = true;
         Scanner sc = new Scanner(System.in);
         String msg = null;
+        boolean logged = false;
 
         String ip;
         String port;
@@ -55,12 +56,12 @@ public class Interface {
                     Client sender = new Client(clientSocket);
                     ListenThread listener = new ListenThread(clientSocket);
                     
-                    runAuthentication(sender);
+                    logged = runAuthentication(sender);
                     listener.start();
 
                     
 
-                    while (running) {
+                    while (running && logged) {
 
                         System.out.println("Introduce your message.\n'exit' for end the application.");
                         try {
@@ -71,12 +72,14 @@ public class Interface {
                         }
                         if (msg.toLowerCase().equals("exit")) {
                             running = false;
-                            listener.stopThread();
                             try {
-                                listener.join();
-                            } catch (InterruptedException ex) {
+                                clientSocket.close();
+                            } catch (IOException ex) {
                                 Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                            listener.stopThread();
+                            listener.interrupt();
+                            
                         } else {
                             sender.sendMessage(msg);
                         }
@@ -104,12 +107,13 @@ public class Interface {
      *
      * @param senderReceiver
      */
-    public void runAuthentication(Client senderReceiver) {
+    public boolean runAuthentication(Client senderReceiver) {
         Scanner sc = new Scanner(System.in);
         String username = "";
         String password = "";
         String serverAnswer = "";
         String selectedOption = "";
+        boolean logged = true;
         try {
             System.out.println("Welcome to T-Sysgram.");
 
@@ -148,15 +152,19 @@ public class Interface {
                         break;
                     case "exit":
                         serverAnswer = "true";
+                        logged = false;
                         break;
                     default:
                         System.out.println("Incorrect option");
+                        logged = false;
                 }
 
             }
         } catch (ClientException CliExp) {
             System.out.println(CliExp.getMessage());
         }
+        
+        return logged;
 
     }
 
