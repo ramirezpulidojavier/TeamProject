@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * This class works getting data in and out of the clients
  *
  * @author josemrm30
  */
