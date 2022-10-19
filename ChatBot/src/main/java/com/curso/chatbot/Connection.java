@@ -29,7 +29,7 @@ public class Connection {
      */
     public Connection() {
         host = "192.168.3.215";
-        port = 8081;
+        port = 2525;
 
     }
 
