@@ -11,7 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ *Class that acts as Thread for the main class.
+ * this class just listens as a cliente with them socket and prints the messesages it gets
  * @author gruiztal
  */
 public class ListenThread extends Thread {
@@ -21,11 +22,11 @@ public class ListenThread extends Thread {
     boolean stop;
 
     /**
-     * ListenThread constructor. It receives a socket of a new Client who is
-     * connected.
+     * ListenThread constructor.It receives a socket of a new Client who is
+ connected.
      *
-     * @param newSocket
-     * @throws IOException
+     * @param soc
+     * @throws com.curso.exceptions.ClientException
      */
     public ListenThread(Socket soc) throws ClientException {
         this.client = new Client(soc);
@@ -36,7 +37,7 @@ public class ListenThread extends Thread {
      * Method for stopping execution of the thread.
      */
     public void stopThread() {
-        this.stop = false;
+        this.stop = true;
     }
 
     /**
