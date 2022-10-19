@@ -50,14 +50,15 @@ public class Interface {
             Connection conct = new Connection(ip, Integer.parseInt(port));
             Socket clientSocket = conct.connect();
             if (clientSocket.isConnected()) {
-                
 
                 try {
                     Client sender = new Client(clientSocket);
                     ListenThread listener = new ListenThread(clientSocket);
+                    
+                    runAuthentication(sender);
                     listener.start();
 
-                    runAuthentication(sender);
+                    
 
                     while (running) {
 
@@ -71,6 +72,11 @@ public class Interface {
                         if (msg.toLowerCase().equals("exit")) {
                             running = false;
                             listener.stopThread();
+                            try {
+                                listener.join();
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         } else {
                             sender.sendMessage(msg);
                         }
@@ -128,6 +134,7 @@ public class Interface {
                         password = sc.nextLine();
                         senderReceiver.sendMessage("R");
                         senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
+                        
                         serverAnswer = senderReceiver.getMessage();
                         break;
                     case "2":
