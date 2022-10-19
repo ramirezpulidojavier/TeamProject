@@ -48,15 +48,16 @@ public class Interface {
 
         if (port.matches("[0-9]+")) {
             Connection conct = new Connection(ip, Integer.parseInt(port));
-            if (conct.hostAvailabilityCheck()) {
-                Socket clientSocket = conct.connect();
+            Socket clientSocket = conct.connect();
+            if (clientSocket.isConnected()) {
+                
 
                 try {
                     Client sender = new Client(clientSocket);
                     ListenThread listener = new ListenThread(clientSocket);
                     listener.start();
 
-                    runAuthentication();
+                    runAuthentication(sender);
 
                     while (running) {
 
@@ -95,17 +96,15 @@ public class Interface {
      *
      * To end the loop insert 'exit'
      *
+     * @param senderReceiver
      */
-    public void runAuthentication() {
+    public void runAuthentication(Client senderReceiver) {
         Scanner sc = new Scanner(System.in);
         String username = "";
         String password = "";
         String serverAnswer = "";
         String selectedOption = "";
-        Connection conct = new Connection();
-        Socket clientSocket = conct.connect();
         try {
-            Client senderReceiver = new Client(clientSocket);
             System.out.println("Welcome to T-Sysgram.");
 
             while (!serverAnswer.equals("true")) {
