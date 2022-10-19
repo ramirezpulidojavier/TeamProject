@@ -7,6 +7,10 @@ package com.curso.chatclient;
 import com.curso.exceptions.ClientException;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -148,5 +152,49 @@ public class Interface {
             System.out.println(CliExp.getMessage());
         }
 
+    }
+
+    /**
+     * Get Secure Password that receives a password introduced by an user and a
+     * salt generation for hashing the user password.
+     *
+     * @param   passwordToHash
+     * @param   salt
+     * @return  A hashed password
+     */
+    public String getSecurePassword(String passwordToHash, String salt) {
+        String generatedPassword = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // Add password bytes to digest
+            md.update(salt.getBytes());
+
+            // Get the hash's bytes
+            byte[] bytes = md.digest(passwordToHash.getBytes());
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < bytes.length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+        }
+        return generatedPassword;
+    }
+
+    /**
+     * This salt is pruposed to add complexity to the key
+     * 
+     * @return  A chain of bytes in String type variable.
+     * @throws  NoSuchProviderException
+     */
+    public String getSalt() throws NoSuchAlgorithmException, NoSuchProviderException {
+        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
+        byte[] salt = new byte[16];
+        sr.nextBytes(salt);
+        return salt.toString();
     }
 }
