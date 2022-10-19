@@ -104,5 +104,15 @@ public class Connection {
         }
         return false;
     }
+    
+    public boolean hostAvailabilityCheck(){
+        try(Socket s = new Socket(getHost(), getPort())){
+            return true;
+        }catch (IOException ex){
+            
+        }
+        
+        return false;
+    }
 
 }

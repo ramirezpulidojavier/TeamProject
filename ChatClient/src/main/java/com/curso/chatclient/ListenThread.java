@@ -22,11 +22,11 @@ public class ListenThread extends Thread {
     boolean stop;
 
     /**
-     * ListenThread constructor. It receives a socket of a new Client who is
-     * connected.
+     * ListenThread constructor.It receives a socket of a new Client who is
+ connected.
      *
-     * @param newSocket
-     * @throws IOException
+     * @param soc
+     * @throws com.curso.exceptions.ClientException
      */
     public ListenThread(Socket soc) throws ClientException {
         this.client = new Client(soc);
@@ -37,7 +37,7 @@ public class ListenThread extends Thread {
      * Method for stopping execution of the thread.
      */
     public void stopThread() {
-        this.stop = false;
+        this.stop = true;
     }
 
     /**
