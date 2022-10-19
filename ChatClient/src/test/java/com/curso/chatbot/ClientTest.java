@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
  */
-package com.curso.chatclient;
+package com.curso.chatbot;
 
+import com.curso.chatbot.Client;
 import com.curso.exceptions.ClientException;
 import java.io.BufferedReader;
 import java.io.IOException;
