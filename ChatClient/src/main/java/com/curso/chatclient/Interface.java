@@ -31,7 +31,7 @@ public class Interface {
      * and prints the message that gets
      *
      * To end the loop insert 'exit'
-     * 
+     *
      */
     public void run() {
         boolean running = true;
@@ -128,7 +128,7 @@ public class Interface {
                         System.out.print("Password: ");
                         password = sc.nextLine();
                         senderReceiver.sendMessage("R");
-                        senderReceiver.sendMessage(username + "|" + password);
+                        senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
                         serverAnswer = senderReceiver.getMessage();
                         break;
                     case "2":
@@ -137,7 +137,7 @@ public class Interface {
                         System.out.print("Password: ");
                         password = sc.nextLine();
                         senderReceiver.sendMessage("L");
-                        senderReceiver.sendMessage(username + "|" + password);
+                        senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
                         serverAnswer = senderReceiver.getMessage();
                         break;
                     case "exit":
@@ -148,22 +148,29 @@ public class Interface {
                 }
 
             }
-        }catch (ClientException CliExp){
+        } catch (ClientException CliExp) {
             System.out.println(CliExp.getMessage());
         }
 
     }
 
     /**
-     * Get Secure Password that receives a password introduced by an user and a
-     * salt generation for hashing the user password.
+     * Get Secure Password that receives a password introduced by an user for
+     * hashing the user password.
      *
-     * @param   passwordToHash
-     * @param   salt
-     * @return  A hashed password
+     * @param passwordToHash
+     * @return A hashed password
      */
-    public String getSecurePassword(String passwordToHash, String salt) {
+    public String getSecurePassword(String passwordToHash) {
         String generatedPassword = null;
+        String salt = null;
+        try {
+            salt = getSalt();
+        } catch (NoSuchAlgorithmException e) {
+            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+        } catch (NoSuchProviderException e) {
+            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+        }
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
 
@@ -187,9 +194,9 @@ public class Interface {
 
     /**
      * This salt is pruposed to add complexity to the key
-     * 
-     * @return  A chain of bytes in String type variable.
-     * @throws  NoSuchProviderException
+     *
+     * @return A chain of bytes in String type variable.
+     * @throws NoSuchProviderException
      */
     public String getSalt() throws NoSuchAlgorithmException, NoSuchProviderException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
