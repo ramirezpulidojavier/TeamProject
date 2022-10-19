@@ -66,9 +66,9 @@ public class Interface {
      * Get Secure Password that receives a password introduced by an user and a
      * salt generation for hashing the user password.
      *
-     * @param passwordToHash
-     * @param salt
-     * @return
+     * @param   passwordToHash
+     * @param   salt
+     * @return  A hashed password
      */
     public String getSecurePassword(String passwordToHash, String salt) {
         String generatedPassword = null;
@@ -94,9 +94,10 @@ public class Interface {
     }
 
     /**
-     *
-     * @return @throws NoSuchAlgorithmException
-     * @throws NoSuchProviderException
+     * This salt is pruposed to add complexity to the key
+     * 
+     * @return  A chain of bytes in String type variable.
+     * @throws  NoSuchProviderException
      */
     public String getSalt() throws NoSuchAlgorithmException, NoSuchProviderException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
