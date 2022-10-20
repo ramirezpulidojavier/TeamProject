@@ -38,6 +38,7 @@ public class ListenThread extends Thread {
      */
     public void stopThread() {
         this.stop = true;
+        
     }
 
     /**
