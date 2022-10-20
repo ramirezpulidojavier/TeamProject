@@ -34,42 +34,26 @@ public class Interface {
      *
      */
     public void run() {
-        boolean running = true;
-        Scanner sc = new Scanner(System.in);
-        String msg = null;
-        boolean logged = false;
+        String ip = "192.168.3.215";
+        String port = "2525";
 
-        String ip;
-        String port;
-
-        System.out.println("Introduce hostname:");
-        ip = sc.nextLine();
-        System.out.println("Introduce port:");
-        port = sc.nextLine();
-
-        if (port.matches("[0-9]+")) {
-            Connection conct = new Connection(ip, Integer.parseInt(port));
-            Socket clientSocket = conct.connect();
-            if (clientSocket.isConnected()) {
-
-                try {
-                    Client sender = new Client(clientSocket);
-                    ListenThread listener = new ListenThread(clientSocket);
-                    
-                    logged = runAuthentication(sender);
-                    listener.start();
-                    
-                } catch (ClientException CliExc) {
-                    System.out.println(CliExc.getMessage());
-                }
-
-            } else {
-                System.out.println("Error: Server is not running.");
+        Connection conct = new Connection(ip, Integer.parseInt(port));
+        Socket clientSocket = conct.connect();
+        if (clientSocket.isConnected()) {
+            try {
+                Client sender = new Client(clientSocket);
+                ListenThread listener = new ListenThread(clientSocket);
+                runAuthentication(sender);
+                
+                // Bot is listening
+                listener.start();
+                
+            } catch (ClientException CliExc) {
+                System.out.println(CliExc.getMessage());
             }
         } else {
-            System.out.println("Error: Incorrect port format ");
+            System.out.println("Error: Server is not running.");
         }
-
     }
 
     /**
@@ -81,65 +65,19 @@ public class Interface {
      *
      * @param senderReceiver
      */
-    public boolean runAuthentication(Client senderReceiver) {
-        Scanner sc = new Scanner(System.in);
-        String username = "";
-        String password = "";
+    public void runAuthentication(Client senderReceiver) {
+        String username = "bot";
+        String password = "bot";
         String serverAnswer = "";
-        String selectedOption = "";
-        boolean logged = true;
         try {
-            System.out.println("Welcome to T-Sysgram.");
-
             while (!serverAnswer.equals("true")) {
-
-                System.out.println("Choose an option.\n'exit' for end the application.");
-                System.out.println("1. Sign up");
-                System.out.println("2. Log in");
-
-                try {
-                    selectedOption = sc.nextLine();
-                } catch (NoSuchElementException e) {
-                    System.err.println(e);
-                    LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
-                }
-
-                switch (selectedOption.toLowerCase()) {
-                    case "1":
-                        System.out.print("Username: ");
-                        username = sc.nextLine();
-                        System.out.print("Password: ");
-                        password = sc.nextLine();
-                        senderReceiver.sendMessage("R");
-                        senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
-                        
-                        serverAnswer = senderReceiver.getMessage();
-                        break;
-                    case "2":
-                        System.out.print("Username: ");
-                        username = sc.nextLine();
-                        System.out.print("Password: ");
-                        password = sc.nextLine();
-                        senderReceiver.sendMessage("L");
-                        senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
-                        serverAnswer = senderReceiver.getMessage();
-                        break;
-                    case "exit":
-                        serverAnswer = "true";
-                        logged = false;
-                        break;
-                    default:
-                        System.out.println("Incorrect option");
-                        logged = false;
-                }
-
+                senderReceiver.sendMessage("L");
+                senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
+                serverAnswer = senderReceiver.getMessage();
             }
         } catch (ClientException CliExp) {
             System.out.println(CliExp.getMessage());
         }
-        
-        return logged;
-
     }
 
     /**

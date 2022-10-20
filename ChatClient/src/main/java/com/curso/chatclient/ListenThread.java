@@ -11,8 +11,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *Class that acts as Thread for the main class.
- * this class just listens as a cliente with them socket and prints the messesages it gets
+ * Class that acts as Thread for the main class. this class just listens as a
+ * cliente with them socket and prints the messesages it gets
+ *
  * @author gruiztal
  */
 public class ListenThread extends Thread {
@@ -23,7 +24,7 @@ public class ListenThread extends Thread {
 
     /**
      * ListenThread constructor.It receives a socket of a new Client who is
- connected.
+     * connected.
      *
      * @param soc
      * @throws com.curso.exceptions.ClientException
@@ -49,7 +50,17 @@ public class ListenThread extends Thread {
 
         while (!this.stop) {
             try {
-                System.out.println(client.getMessage());
+                String messageReceived = client.getMessage();
+                System.out.println(messageReceived);
+                switch (messageReceived) {
+                    case "/menu":
+                        client.sendMessage("""
+                                           Chat Menu:
+                                           /dumb - How dumb are you?
+                                           /weather - Get current weather""");
+                        break;
+                }
+
             } catch (ClientException ex) {
                 LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
             }
