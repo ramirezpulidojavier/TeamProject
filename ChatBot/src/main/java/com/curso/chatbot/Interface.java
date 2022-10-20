@@ -58,33 +58,7 @@ public class Interface {
                     
                     logged = runAuthentication(sender);
                     listener.start();
-
                     
-
-                    while (running && logged) {
-
-                        System.out.println("> ");
-                        try {
-                            msg = sc.nextLine();
-                        } catch (NoSuchElementException e) {
-                            System.err.println(e);
-                            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
-                        }
-                        if (msg.toLowerCase().equals("exit")) {
-                            running = false;
-                            try {
-                                clientSocket.close();
-                            } catch (IOException ex) {
-                                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            listener.stopThread();
-                            listener.interrupt();
-                            
-                        } else {
-                            sender.sendMessage(msg);
-                        }
-
-                    }
                 } catch (ClientException CliExc) {
                     System.out.println(CliExc.getMessage());
                 }
