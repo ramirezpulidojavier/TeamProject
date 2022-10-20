@@ -38,8 +38,55 @@ public class Interface {
         Scanner sc = new Scanner(System.in);
         String msg = null;
 
+<<<<<<< HEAD
         String ip = "192.168.3.215";
         String port = "2525";
+=======
+        String ip;
+        String port;
+
+        System.out.println("Introduce hostname:");
+        ip = sc.nextLine();
+        System.out.println("Introduce port:");
+        port = sc.nextLine();
+
+        if (port.matches("[0-9]+")) {
+            Connection conct = new Connection(ip, Integer.parseInt(port));
+            Socket clientSocket = conct.connect();
+            if (clientSocket.isConnected()) {
+
+                try {
+                    Client sender = new Client(clientSocket);
+                    ListenThread listener = new ListenThread(clientSocket);
+                    
+                    logged = runAuthentication(sender);
+                    listener.start();
+
+                    
+
+                    while (running && logged) {
+
+                        System.out.println("> ");
+                        try {
+                            msg = sc.nextLine();
+                        } catch (NoSuchElementException e) {
+                            System.err.println(e);
+                            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+                        }
+                        if (msg.toLowerCase().equals("exit")) {
+                            running = false;
+                            try {
+                                clientSocket.close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            listener.stopThread();
+                            listener.interrupt();
+                            
+                        } else {
+                            sender.sendMessage(msg);
+                        }
+>>>>>>> origin/developChatBot
 
         Connection conct = new Connection(ip, Integer.parseInt(port));
         Socket clientSocket = conct.connect();

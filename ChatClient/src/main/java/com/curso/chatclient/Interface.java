@@ -63,7 +63,7 @@ public class Interface {
 
                     while (running && logged) {
 
-                        System.out.println("Introduce your message.\n'exit' for end the application.");
+                        System.out.println("> ");
                         try {
                             msg = sc.nextLine();
                         } catch (NoSuchElementException e) {
