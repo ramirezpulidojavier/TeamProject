@@ -4,12 +4,17 @@
  */
 package com.curso.chatclient;
 
+import com.curso.exceptions.ClientException;
+
 /**
  *
  * @author juacuadr
  */
 public class MainBot {
-    public static void main(String[] args) {
-        System.out.println("Bot execution");
+    public static void main(String[] args) throws ClientException {
+        Interface menu = new Interface();
+        
+        // Run for a client
+        menu.run(0);
     }
 }
