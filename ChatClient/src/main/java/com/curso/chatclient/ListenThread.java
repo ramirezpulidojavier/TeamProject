@@ -50,17 +50,7 @@ public class ListenThread extends Thread {
 
         while (!this.stop) {
             try {
-                String messageReceived = client.getMessage();
-                System.out.println(messageReceived);
-                switch (messageReceived) {
-                    case "/menu":
-                        client.sendMessage("""
-                                           Chat Menu:
-                                           /dumb - How dumb are you?
-                                           /weather - Get current weather""");
-                        break;
-                }
-
+                System.out.println(client.getMessage());
             } catch (ClientException ex) {
                 LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
             }
