@@ -38,6 +38,8 @@ public class Client {
      * @throws ClientException when an I/O error occurs while creating the output/input stream.
      */
     public Client(Socket newSocket) throws ClientException {
+        LOGGERCLIENT.setLevel(Level.ALL);
+        LOGGERCLIENT.log(Level.SEVERE, "asdad");
         if (newSocket != null) {
             mySocket = newSocket;
             InputStream input;
@@ -105,6 +107,7 @@ public class Client {
             // Program logger
             throw new ClientException("Error reading line.");
         }
+        LOGGERCLIENT.log(Level.FINE, "Socket received string: "+line);
         
         return line;
     }

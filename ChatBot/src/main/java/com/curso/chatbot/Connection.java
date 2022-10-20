@@ -28,7 +28,7 @@ public class Connection {
      * Default Constructor it assign the default host and port.
      */
     public Connection() {
-        host = "192.168.3.215";
+        host = "192.168.3.102";
         port = 2525;
 
     }

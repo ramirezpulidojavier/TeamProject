@@ -50,15 +50,20 @@ public class ListenThread extends Thread {
         while (!this.stop) {
             try {
                 String messageReceived = client.getMessage();
-                System.out.println(messageReceived);
-                switch (messageReceived) {
-                    case "/menu":
-                        client.sendMessage("""
-                                           Chat Menu:
-                                           /dumb - How dumb are you?
-                                           /weather - Get current weather""");
-                        break;
+                
+                if (messageReceived != null || !messageReceived.equals("")) {
+                    String[] splitted = messageReceived.split(": ");
+                    System.out.println(messageReceived);
+                    switch (splitted[1]) {
+                        case "/menu":
+                            client.sendMessage("Chat Menu:\n /dumb - How dumb are you?\n /weather - Get current weather");
+                            break;
+                    }
                 }
+                else {
+                    System.out.println("No recibo mensaje");
+                }
+                
 
             } catch (ClientException ex) {
                 LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
