@@ -22,6 +22,56 @@ import java.util.logging.Logger;
  * @author josemrm30
  */
 public class Interface {
+    
+    public static final String ANSI_BOLD = "\u001B[1m";
+    public static final String ANSI_UNDERLINED = "\u001B[4m";
+    public static final String ANSI_HIGHLIGHT = "\u001B[7m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+
+    public static final String[] FOREGROUNDS = {ANSI_RED, ANSI_GREEN};
+
+    static int numberChar(String str, char character) {
+        int counter = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == character) {
+                counter++;
+            }
+        }
+
+        return counter;
+    }
+
+    static String formatterText(String str) {
+        if (numberChar(str, '_') >=2) {
+            str = str.replaceFirst("_", ANSI_RED);
+            str = str.replaceFirst("_", ANSI_RESET);
+        }
+        
+        if (numberChar(str, '-') >= 2) {
+            str = str.replaceFirst("-", ANSI_BOLD);
+            str = str.replaceFirst("-", ANSI_RESET);
+        }
+        
+        if (numberChar(str, '+') >= 2) {
+            str = str.replaceFirst("\\Q+", ANSI_UNDERLINED);
+            str = str.replaceFirst("\\Q+", ANSI_RESET);
+        }
+        
+        if (numberChar(str, '*') >= 2) {
+            str = str.replaceFirst("\\Q*", ANSI_HIGHLIGHT);
+            str = str.replaceFirst("\\Q*", ANSI_RESET);
+        }
+        
+        if (numberChar(str, '%') >= 2) {
+            str = str.replaceFirst("%", ANSI_GREEN);
+            str = str.replaceFirst("%", ANSI_RESET);
+        }
+        
+        
+        return str;
+    }
 
     private final static Logger LOGGERINTERFACE = Logger.getLogger(Interface.class.getName());
 
@@ -63,7 +113,7 @@ public class Interface {
 
                     while (running && logged) {
 
-                        System.out.println("> ");
+                        System.out.print("> ");
                         try {
                             msg = sc.nextLine();
                         } catch (NoSuchElementException e) {
@@ -81,7 +131,7 @@ public class Interface {
                             listener.interrupt();
                             
                         } else {
-                            sender.sendMessage(msg);
+                            sender.sendMessage(formatterText(msg));
                         }
 
                     }
