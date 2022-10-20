@@ -6,29 +6,30 @@ package com.curso.chatclient;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *Class that connects a Client to a Server.
+ * Class that connects a Client to a Server.
+ *
  * @author gruital.
  *
- * 
+ *
  */
 public class Connection {
 
     private String host = "";
     private int port;
     private Socket mySocket;
-    private final static Logger LOGGERCONNECTION = Logger.getLogger(Connection.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(Connection.class.getName());
 
     /**
      * Default Constructor it assign the default host and port.
      */
     public Connection() {
-        host = "192.168.3.215";
+        host = "192.168.3.102";
         port = 2525;
+        LOGGER.setLevel(Level.ALL);
 
     }
 
@@ -41,19 +42,21 @@ public class Connection {
     public Connection(String host, int port) {
         this.host = host;
         this.port = port;
+        LOGGER.setLevel(Level.ALL);
     }
-    
+
     /**
      * Constructor to creare a new object given a socket .
+     *
      * @param newSocket .
      */
-
     public Connection(Socket newSocket) {
         mySocket = newSocket;
     }
 
     /**
      * This method returns the values of host in the object.
+     *
      * @return host of the object.
      */
     public String getHost() {
@@ -62,6 +65,7 @@ public class Connection {
 
     /**
      * This method returns the values of port in the object.
+     *
      * @return port of the object.
      */
     public int getPort() {
@@ -69,7 +73,8 @@ public class Connection {
     }
 
     /**
-     *this method connects the user with its socket to the server.
+     * this method connects the user with its socket to the server.
+     *
      * @return Sockt that client is gonna use for the connection.
      */
     public Socket connect() {
@@ -79,7 +84,7 @@ public class Connection {
 
             } catch (SecurityException | IllegalArgumentException | IOException ex) {
                 //Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-                LOGGERCONNECTION.log(Level.FINE, ex.toString(), ex);
+                LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
 
         }
@@ -88,31 +93,18 @@ public class Connection {
 
     /**
      *
-     * @param socket needed the socket yhat is going to be closed.
      * @return true if the socket was able to be closed.
      */
-    public boolean close(Socket socket) {
-        if (socket != null) {
+    public boolean close() {
+        if (mySocket != null) {
             try {
-                socket.close();
+                mySocket.close();
                 return true;
             } catch (SecurityException | IllegalArgumentException | IOException ex) {
-                //Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
-                LOGGERCONNECTION.log(Level.FINE, ex.toString(), ex);
+                LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
 
         }
         return false;
     }
-    
-    public boolean hostAvailabilityCheck(){
-        try(Socket s = new Socket(getHost(), getPort())){
-            return true;
-        }catch (IOException ex){
-            
-        }
-        
-        return false;
-    }
-
 }

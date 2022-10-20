@@ -15,6 +15,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException, ClientException {
         Interface menu = new Interface();
-        menu.run();
+        
+        // Run for a client
+        menu.run(1);
     }
 }

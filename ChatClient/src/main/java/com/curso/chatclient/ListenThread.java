@@ -5,7 +5,6 @@
 package com.curso.chatclient;
 
 import com.curso.exceptions.ClientException;
-import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +18,7 @@ import java.util.logging.Logger;
 public class ListenThread extends Thread {
 
     Client client;
-    private final static Logger LOGGERTHREAD = Logger.getLogger(Client.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(Client.class.getName());
     boolean stop;
 
     /**
@@ -32,6 +31,7 @@ public class ListenThread extends Thread {
     public ListenThread(Socket soc) throws ClientException {
         this.client = new Client(soc);
         this.stop = false;
+        LOGGER.setLevel(Level.ALL);
     }
 
     /**
@@ -52,7 +52,7 @@ public class ListenThread extends Thread {
             try {
                 System.out.println(client.getMessage());
             } catch (ClientException ex) {
-                LOGGERTHREAD.log(Level.FINE, ex.toString(), ex);
+                LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }
         }
     }

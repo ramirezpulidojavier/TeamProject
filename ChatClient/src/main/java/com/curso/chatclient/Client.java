@@ -28,7 +28,7 @@ public class Client {
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
-    private final static Logger LOGGERCLIENT = Logger.getLogger(Client.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(Client.class.getName());
 
     /**
      * Constructor that receive a Socket and fill myWriter and myReader private
@@ -38,6 +38,8 @@ public class Client {
      * @throws ClientException when an I/O error occurs while creating the output/input stream.
      */
     public Client(Socket newSocket) throws ClientException {
+        LOGGER.setLevel(Level.ALL);
+        
         if (newSocket != null) {
             mySocket = newSocket;
             InputStream input;
@@ -46,7 +48,7 @@ public class Client {
             try {
                 output = newSocket.getOutputStream();
             } catch (IOException ex) {
-                // Program logger
+                LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 throw new ClientException("Error creating the output stream: the socket could not be connected");
             }
 
@@ -54,11 +56,8 @@ public class Client {
                 myWriter = new PrintWriter(output, true);
                 input = mySocket.getInputStream();
             } catch (SecurityException | IllegalArgumentException | IOException ex) {
-                LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
-                // Program logger
+                LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 throw new ClientException("Error creating the input stream: The socket is closed, not connected or the input has been shutdown");
-                
-                
             }
             
             myReader = new BufferedReader(new InputStreamReader(input));
@@ -101,8 +100,7 @@ public class Client {
         try {
             line = myReader.readLine();
         } catch (IOException ex) {
-            LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
-            // Program logger
+            LOGGER.log(Level.SEVERE, ex.toString(), ex);
             throw new ClientException("Error reading line.");
         }
         

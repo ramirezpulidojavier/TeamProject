@@ -23,21 +23,60 @@ import java.util.logging.Logger;
  */
 public class Interface {
 
-    private final static Logger LOGGERINTERFACE = Logger.getLogger(Interface.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(Interface.class.getName());
+    private boolean reading = true;
+    private boolean logged = false;
+    private String msg = null;
+    private Socket mySocket;
+    private Client sender;
+    private ListenThread listener;
+    Connection conct;
+    private Scanner sc;
+
+    public Interface() {
+        sc = new Scanner(System.in);
+        LOGGER.setLevel(Level.ALL);
+    }
 
     /**
-     * Method used for all inputs and outputs.Defines the .start of this thread
-     * The Thread keeps reading the next input that we recive from the server
-     * and prints the message that gets
-     *
-     * To end the loop insert 'exit'
      *
      */
-    public void run() {
-        boolean running = true;
-        Scanner sc = new Scanner(System.in);
-        String msg = null;
-        boolean logged = false;
+    public void entryMessageByUser() {
+
+        while (reading && logged) {
+
+            System.out.println("> ");
+
+            // Check message mode
+            try {
+                msg = sc.nextLine();
+            } catch (NoSuchElementException e) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
+
+            // If user writes exit
+            if (msg.toLowerCase().equals("exit")) {
+                reading = false;
+
+                // Close socket connection
+                conct.close();
+
+                // Stop boolean variable and then, interrupt the thread execution
+                listener.stopThread();
+                listener.interrupt();
+
+            } else {
+                sender.sendMessage(msg);
+            }
+
+        }
+    }
+
+    /**
+     *
+     * @return @throws ClientException
+     */
+    public Socket stablishConnection() throws ClientException {
 
         String ip;
         String port;
@@ -48,54 +87,23 @@ public class Interface {
         port = sc.nextLine();
 
         if (port.matches("[0-9]+")) {
-            Connection conct = new Connection(ip, Integer.parseInt(port));
-            Socket clientSocket = conct.connect();
-            if (clientSocket.isConnected()) {
+            conct = new Connection(ip, Integer.parseInt(port));
+            mySocket = conct.connect();
 
-                try {
-                    Client sender = new Client(clientSocket);
-                    ListenThread listener = new ListenThread(clientSocket);
-                    
-                    logged = runAuthentication(sender);
-                    listener.start();
-
-                    
-
-                    while (running && logged) {
-
-                        System.out.println("> ");
-                        try {
-                            msg = sc.nextLine();
-                        } catch (NoSuchElementException e) {
-                            System.err.println(e);
-                            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
-                        }
-                        if (msg.toLowerCase().equals("exit")) {
-                            running = false;
-                            try {
-                                clientSocket.close();
-                            } catch (IOException ex) {
-                                Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            listener.stopThread();
-                            listener.interrupt();
-                            
-                        } else {
-                            sender.sendMessage(msg);
-                        }
-
-                    }
-                } catch (ClientException CliExc) {
-                    System.out.println(CliExc.getMessage());
+            // Check if socket is connected successfully
+            if (mySocket != null) {
+                if (mySocket.isConnected()) {
+                    return mySocket;
+                } else {
+                    throw new ClientException("Error: Socket connection could not be stablished.");
                 }
-
             } else {
-                System.out.println("Error: Server is not running.");
+                throw new ClientException("Error: Server is not running.");
+
             }
         } else {
-            System.out.println("Error: Incorrect port format ");
+            throw new ClientException("Error: Incorrect port format.");
         }
-
     }
 
     /**
@@ -105,67 +113,133 @@ public class Interface {
      *
      * To end the loop insert 'exit'
      *
-     * @param senderReceiver
      */
-    public boolean runAuthentication(Client senderReceiver) {
-        Scanner sc = new Scanner(System.in);
-        String username = "";
-        String password = "";
+    public void run(int isClient) {
+        boolean running = true;
+
+        // Stablish socket connection
+        while (running) {
+            try {
+                mySocket = stablishConnection();
+                running = false;
+            } catch (ClientException e) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
+        }
+
+        // Initialize new instance of Client named sender
+        try {
+            sender = new Client(mySocket);
+        } catch (ClientException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
+        // Initialize new instance of ListenThred name listener
+        try {
+            listener = new ListenThread(mySocket);
+        } catch (ClientException e) {
+            LOGGER.log(Level.SEVERE, e.toString(), e);
+        }
+
+        // Client authentication
+        logged = runAuthentication(isClient);
+
+        // Client run
+        if (isClient == 1) {
+            listener.start();
+            
+            // Initialize a subroutine for sending messages
+            entryMessageByUser();
+        }
+        else {
+            // Bot routine
+            
+        }
+
+        // Close scanner
+        sc.close();
+    }
+
+    /**
+     * Method used for all inputs and outputs.Defines the .start of this thread
+     * The Thread keeps reading the next input that we recive from the server
+     * and prints the message that gets
+     *
+     * To end the loop insert 'exit'
+     */
+    public boolean runAuthentication(int isClient) {
         String serverAnswer = "";
         String selectedOption = "";
-        boolean logged = true;
+        logged = true;
         try {
             System.out.println("Welcome to T-Sysgram.");
 
             while (!serverAnswer.equals("true")) {
+                
+                // Check if it is a client
+                if (isClient == 1) {
+                    System.out.println("Choose an option.\n'exit' for end the application.");
+                    System.out.println("1. Sign up");
+                    System.out.println("2. Log in");
 
-                System.out.println("Choose an option.\n'exit' for end the application.");
-                System.out.println("1. Sign up");
-                System.out.println("2. Log in");
-
-                try {
-                    selectedOption = sc.nextLine();
-                } catch (NoSuchElementException e) {
-                    System.err.println(e);
-                    LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+                    try {
+                        selectedOption = sc.nextLine();
+                    } catch (NoSuchElementException e) {
+                        LOGGER.log(Level.SEVERE, e.toString(), e);
+                    }
+                }
+                else {
+                    
+                    // 2 option if it is a bot
+                    selectedOption = "2";
                 }
 
+                // Checking selectedOption value
                 switch (selectedOption.toLowerCase()) {
-                    case "1":
-                        System.out.print("Username: ");
-                        username = sc.nextLine();
-                        System.out.print("Password: ");
-                        password = sc.nextLine();
-                        senderReceiver.sendMessage("R");
-                        senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
-                        
-                        serverAnswer = senderReceiver.getMessage();
-                        break;
-                    case "2":
-                        System.out.print("Username: ");
-                        username = sc.nextLine();
-                        System.out.print("Password: ");
-                        password = sc.nextLine();
-                        senderReceiver.sendMessage("L");
-                        senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
-                        serverAnswer = senderReceiver.getMessage();
-                        break;
-                    case "exit":
+                    case "1" -> {
+                        inputUsernamePassword("R", isClient);
+                        serverAnswer = sender.getMessage();
+                    }
+                    case "2" -> {
+                        inputUsernamePassword("L", isClient);
+                        serverAnswer = sender.getMessage();
+                    }
+                    case "exit" -> {
                         serverAnswer = "true";
                         logged = false;
-                        break;
-                    default:
+                    }
+                    default -> {
                         System.out.println("Incorrect option");
                         logged = false;
+                    }
                 }
-
             }
         } catch (ClientException CliExp) {
             System.out.println(CliExp.getMessage());
         }
-        
         return logged;
+    }
 
+    /**
+     *
+     * @param mode
+     */
+    public void inputUsernamePassword(String mode, int isClient) {
+        String username;
+        String password;
+
+        if (isClient == 1) {
+            System.out.print("Username: ");
+            username = sc.nextLine();
+            System.out.print("Password: ");
+            password = sc.nextLine();
+        } else {
+            username = "bot";
+            password = "bot";
+        }
+
+        sender.sendMessage(mode);
+        sender.sendMessage(username + "|" + getSecurePassword(password));
     }
 
     /**
@@ -181,9 +255,9 @@ public class Interface {
         try {
             salt = getSalt();
         } catch (NoSuchAlgorithmException e) {
-            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+            LOGGER.log(Level.FINE, e.toString(), e);
         } catch (NoSuchProviderException e) {
-            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+            LOGGER.log(Level.FINE, e.toString(), e);
         }
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -201,7 +275,7 @@ public class Interface {
 
             generatedPassword = sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
+            LOGGER.log(Level.FINE, e.toString(), e);
         }
         return generatedPassword;
     }
