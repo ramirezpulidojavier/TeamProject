@@ -114,7 +114,7 @@ public class Interface {
      * To end the loop insert 'exit'
      *
      */
-    public void run(int isClient) {
+    public void run(int isClient) throws ClientException {
         boolean running = true;
 
         // Stablish socket connection
@@ -153,7 +153,8 @@ public class Interface {
         }
         else {
             // Bot routine
-            
+            Bot myBot = new Bot(sender);
+            myBot.listeningMessages();
         }
 
         // Close scanner

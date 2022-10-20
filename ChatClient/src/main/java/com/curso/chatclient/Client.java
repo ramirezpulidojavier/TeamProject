@@ -22,9 +22,6 @@ import java.util.logging.Logger;
  */
 public class Client {
 
-    // CREATE LOGGER
-    // private final Logger LOGGER = Logger.getLogger(Client.class.getName());
-
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
