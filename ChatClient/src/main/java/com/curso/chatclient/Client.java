@@ -17,6 +17,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
@@ -35,7 +37,7 @@ import javax.crypto.Cipher;
  * @author pcorrales2010
  */
 public class Client {
-
+    
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
@@ -59,13 +61,13 @@ public class Client {
             mySocket = newSocket;
             InputStream input;
             OutputStream output;
-
+            
             try {
                 output = newSocket.getOutputStream();
             } catch (IOException ex) {
                 throw new ClientException("Error creating the output stream: the socket could not be connected");
             }
-
+            
             try {
                 myWriter = new PrintWriter(output, true);
                 input = mySocket.getInputStream();
@@ -110,6 +112,23 @@ public class Client {
         } else {
             myWriter.println(message);
         }
+    }
+    public String pickDates(){
+         LocalDateTime timeNow = LocalDateTime.now();
+         DateTimeFormatter formaterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String timeString = timeNow.format(formaterDate).toString();
+        String strLenght = timeString.lenght();
+        return timeString.substring(strLenght - 20, strLenght - 16);
+        
+    }
+
+    public void sendChatMessage(String message) {
+        LocalDateTime timeNow = LocalDateTime.now();
+        DateTimeFormatter formaterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String timeString = timeNow.format(formaterDate).toString();
+        String endString = timeString + "|" + message;
+        
+        sendMessage(endString);
     }
 
     /**
@@ -174,5 +193,4 @@ public class Client {
         byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
         return new String(plainText);
     }
-
 }

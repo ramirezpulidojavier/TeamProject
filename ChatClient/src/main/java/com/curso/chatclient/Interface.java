@@ -65,7 +65,8 @@ public class Interface {
                 listener.interrupt();
 
             } else {
-                sender.sendMessage(msg);
+                //sender.sendMessage(msg);
+                sender.sendChatMessage(msg);
             }
 
         }
