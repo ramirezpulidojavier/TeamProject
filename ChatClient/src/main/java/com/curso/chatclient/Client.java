@@ -37,7 +37,7 @@ import javax.crypto.Cipher;
  * @author pcorrales2010
  */
 public class Client {
-    
+
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
@@ -61,13 +61,13 @@ public class Client {
             mySocket = newSocket;
             InputStream input;
             OutputStream output;
-            
+
             try {
                 output = newSocket.getOutputStream();
             } catch (IOException ex) {
                 throw new ClientException("Error creating the output stream: the socket could not be connected");
             }
-            
+
             try {
                 myWriter = new PrintWriter(output, true);
                 input = mySocket.getInputStream();
@@ -113,21 +113,21 @@ public class Client {
             myWriter.println(message);
         }
     }
-    public String pickDates(){
-         LocalDateTime timeNow = LocalDateTime.now();
-         DateTimeFormatter formaterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+    public boolean checkDates(String s) {
+        LocalDateTime timeNow = LocalDateTime.now();
+        DateTimeFormatter formaterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String timeString = timeNow.format(formaterDate).toString();
-        String strLenght = timeString.lenght();
-        return timeString.substring(strLenght - 20, strLenght - 16);
-        
+        int strLength = s.length();
+        return timeString.equals(s.substring(strLength - 20, strLength - 16));
     }
 
     public void sendChatMessage(String message) {
         LocalDateTime timeNow = LocalDateTime.now();
         DateTimeFormatter formaterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String timeString = timeNow.format(formaterDate).toString();
-        String endString = timeString + "|" + message;
-        
+        String endString = message + "|" + timeString;
+
         sendMessage(endString);
     }
 
@@ -146,25 +146,14 @@ public class Client {
             LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
             throw new ClientException("Error reading line.");
         }
-
+        if (!checkDates(line)) {
+            try {
+                return decrypt(line);
+            } catch (Exception ex) {
+                LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
+            }
+        }
         return line;
-    }
-
-    public void testencrypt() throws NoSuchAlgorithmException {
-        String cipherText = null;
-        String plainText = null;
-        try {
-            cipherText = encrypt(input);
-        } catch (Exception ex) {
-            LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
-        }
-        try {
-            plainText = decrypt(cipherText);
-        } catch (Exception ex) {
-            LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
-        }
-        System.out.println(cipherText);
-        System.out.println(plainText);
     }
 
     public SecretKey generateKey(int n) throws NoSuchAlgorithmException {
