@@ -6,6 +6,7 @@ package com.curso.chatclient;
 
 import com.curso.exceptions.ClientException;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +29,7 @@ public class ListenThread extends Thread {
      * @param soc
      * @throws com.curso.exceptions.ClientException
      */
-    public ListenThread(Socket soc) throws ClientException {
+    public ListenThread(Socket soc) throws ClientException, NoSuchAlgorithmException {
         this.client = new Client(soc);
         this.stop = false;
         LOGGER.setLevel(Level.ALL);
