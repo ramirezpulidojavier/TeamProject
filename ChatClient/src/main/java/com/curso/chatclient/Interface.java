@@ -138,6 +138,8 @@ public class Interface {
                     }
                 } catch (ClientException CliExc) {
                     System.out.println(formatterText(CliExc.getMessage()));
+                    System.out.print(">");
+
                 }
 
             } else {
