@@ -5,7 +5,6 @@
 package com.curso.chatclient;
 
 import com.curso.exceptions.ClientException;
-import java.io.IOException;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -118,7 +117,7 @@ public class Interface {
      * @throws com.curso.exceptions.ClientException
      * @throws java.lang.InterruptedException
      */
-    public void run(int isClient) throws ClientException, InterruptedException {
+    public void run(int isClient) throws ClientException, InterruptedException, NoSuchAlgorithmException {
         boolean running = true;
 
         // Stablish socket connection
@@ -236,6 +235,7 @@ public class Interface {
 
     /**
      *
+     * 
      * @param mode
      * @param isClient
      * @throws java.lang.InterruptedException

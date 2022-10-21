@@ -5,7 +5,9 @@
 package com.curso.chatclient;
 
 import com.curso.exceptions.ClientException;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +36,7 @@ public class Bot {
             System.out.println(msgReaded);
             String code = decodingMessage(msgReaded);
             String res = "";
-            
+
             if (code != null) {
 
                 switch (code) {
@@ -95,21 +97,23 @@ public class Bot {
     public String deathDate() {
         Random random = new Random();
         LocalDate date = LocalDate.now();
+        LocalDate deathDate;
+        deathDate = LocalDate.of(random.nextInt(date.getYear() + 1, 2100), random.nextInt(1, 13), random.nextInt(1, 32));
 
-        int year = random.nextInt(date.getYear() + 1, 2133);
-        int month = random.nextInt(1, 13);
-        int day = random.nextInt(1, 32);
-
-        return Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day);
+        Duration diff = Duration.between(date.atStartOfDay(), deathDate.atStartOfDay());
+        long diffDays = diff.toDays();
+        
+        return "You have "+diffDays/360+" years to live";
+        
     }
 
     public String headsOrTails() {
         Random random = new Random();
-        
+
         if (random.nextInt(2) == 0) {
             return "head";
         }
-        
-        return"tail";
+
+        return "tail";
     }
 }
