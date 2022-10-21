@@ -34,9 +34,6 @@ public class Bot {
             System.out.println(msgReaded);
             String code = decodingMessage(msgReaded);
             String res = "";
-
-            System.out.println("Printing code:");
-            System.out.println(code);
             
             if (code != null) {
 
