@@ -4,12 +4,20 @@
  */
 package com.curso.chatclient;
 
+import com.curso.exceptions.ClientException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.junit.Assert.*;
+
+import static org.mockito.Mockito.when;
 
 /**
  *
@@ -20,117 +28,23 @@ public class BotTest {
     public BotTest() {
     }
 
-    @Test
-    public void testListeningMessages() throws Exception {
-        // GIVEN
-        Socket testSocket = Mockito.mock(Socket.class);
-        BufferedReader testReader = Mockito.mock(BufferedReader.class);
-        PrintWriter testWriter = Mockito.mock(PrintWriter.class);
-
-        Client botClient = new Client(testSocket, testWriter, testReader);
-        Bot instance = new Bot(botClient);
-        
-        // THEN
-        instance.listeningMessages();
-        
-        // EXPECT
-    }
-
+    /**
+     * Test of decoding messages. User sends a message like <username>: <message> and
+     * the method decodes the message and 
+     */
     @Test
     public void testDecodingMessage() {
         // GIVEN
+        System.out.println("Test Decoding Message");
         Socket testSocket = Mockito.mock(Socket.class);
         BufferedReader testReader = Mockito.mock(BufferedReader.class);
         PrintWriter testWriter = Mockito.mock(PrintWriter.class);
 
         Client botClient = new Client(testSocket, testWriter, testReader);
+        Bot mockedBotInstance = new Bot(botClient);
         
-        String msg = "";
-        Bot instance = new Bot(botClient);
-        
-        String expResult = "";
-        String result = instance.decodingMessage(msg);
-        assertEquals(expResult, result);
+        // EXPECT
+        assertEquals(null, mockedBotInstance.decodingMessage("juanca: hola que tal"));
+        assertEquals("/menu", mockedBotInstance.decodingMessage("juanca: /menu"));
     }
-
-    @Test
-    public void testBotMenu() {
-        // GIVEN
-        Socket testSocket = Mockito.mock(Socket.class);
-        BufferedReader testReader = Mockito.mock(BufferedReader.class);
-        PrintWriter testWriter = Mockito.mock(PrintWriter.class);
-
-        Client botClient = new Client(testSocket, testWriter, testReader);
-        
-        Bot instance = new Bot(botClient);
-        
-        String expResult = "";
-        String result = instance.botMenu();
-        assertEquals(expResult, result);
-    }
-
-    @Test
-    public void testDumb() {
-        // GIVEN
-        Socket testSocket = Mockito.mock(Socket.class);
-        BufferedReader testReader = Mockito.mock(BufferedReader.class);
-        PrintWriter testWriter = Mockito.mock(PrintWriter.class);
-
-        Client botClient = new Client(testSocket, testWriter, testReader);
-        
-        Bot instance = new Bot(botClient);
-        
-        String expResult = "";
-        String result = instance.dumb();
-        assertEquals(expResult, result);
-    }
-
-    @Test
-    public void testCompatibility() {
-        // GIVEN
-        Socket testSocket = Mockito.mock(Socket.class);
-        BufferedReader testReader = Mockito.mock(BufferedReader.class);
-        PrintWriter testWriter = Mockito.mock(PrintWriter.class);
-
-        Client botClient = new Client(testSocket, testWriter, testReader);
-        
-        Bot instance = new Bot(botClient);
-        
-        String expResult = "";
-        String result = instance.compatibility();
-        assertEquals(expResult, result);
-    }
-
-    @Test
-    public void testDeathDate() {
-        // GIVEN
-        Socket testSocket = Mockito.mock(Socket.class);
-        BufferedReader testReader = Mockito.mock(BufferedReader.class);
-        PrintWriter testWriter = Mockito.mock(PrintWriter.class);
-
-        Client botClient = new Client(testSocket, testWriter, testReader);
-        
-        Bot instance = new Bot(botClient);
-        
-        String expResult = "";
-        String result = instance.deathDate();
-        assertEquals(expResult, result);
-    }
-
-    @Test
-    public void testHeadsOrTails() {
-        // GIVEN
-        Socket testSocket = Mockito.mock(Socket.class);
-        BufferedReader testReader = Mockito.mock(BufferedReader.class);
-        PrintWriter testWriter = Mockito.mock(PrintWriter.class);
-
-        Client botClient = new Client(testSocket, testWriter, testReader);
-        
-        Bot instance = new Bot(botClient);
-        
-        String expResult = "";
-        String result = instance.headsOrTails();
-        assertEquals(expResult, result);
-    }
-    
 }
