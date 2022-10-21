@@ -116,6 +116,7 @@ public class Interface {
                         System.out.print("> ");
                         try {
                             msg = sc.nextLine();
+                            
                         } catch (NoSuchElementException e) {
                             System.err.println(e);
                             LOGGERINTERFACE.log(Level.FINE, e.toString(), e);
@@ -136,7 +137,7 @@ public class Interface {
 
                     }
                 } catch (ClientException CliExc) {
-                    System.out.println(CliExc.getMessage());
+                    System.out.println(formatterText(CliExc.getMessage()));
                 }
 
             } else {

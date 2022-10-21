@@ -5,7 +5,6 @@
 package com.curso.chatclient;
 
 import com.curso.exceptions.ClientException;
-import java.awt.Font;
 import java.io.IOException;
 
 /**
