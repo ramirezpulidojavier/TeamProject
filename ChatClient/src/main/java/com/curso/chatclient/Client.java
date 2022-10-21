@@ -11,9 +11,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Class Client with the methods: sendMessage and getMessage
@@ -28,6 +35,11 @@ public class Client {
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
+    
+     private SecretKeySpec secretKey;
+    private String secret = "m93s75&ps3c1";
+    private byte[] key;
+    
     private final static Logger LOGGERCLIENT = Logger.getLogger(Client.class.getName());
 
     /**
@@ -86,8 +98,10 @@ public class Client {
      * @param message The message to send to server
      */
     public void sendMessage(String message) {
-        myWriter.println(message);
+        
+        myWriter.println(encrypt(message));
     }
+    
 
     /**
      * Get the message from server
@@ -97,7 +111,7 @@ public class Client {
      */
     public String getMessage() throws ClientException {
         String line;
-        
+
         try {
             line = myReader.readLine();
         } catch (IOException ex) {
@@ -105,8 +119,47 @@ public class Client {
             // Program logger
             throw new ClientException("Error reading line.");
         }
-        
-        return line;
+
+        return decrypt(line);
+    }
+    
+    public void setKey(String myKey) {
+        MessageDigest sha = null;
+        try {
+            key = myKey.getBytes("UTF-8");
+            sha = MessageDigest.getInstance("SHA-1");
+            key = sha.digest(key);
+            key = Arrays.copyOf(key, 16);
+            secretKey = new SecretKeySpec(key, "AES");
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public String encrypt(String strToEncrypt) {
+        try {
+            setKey(secret);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder()
+                    .encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
+        } catch (Exception e) {
+            System.out.println("Error while encrypting: " + e.toString());
+        }
+        return null;
+    }
+    
+    public String decrypt(String strToDecrypt) {
+        try {
+            setKey(secret);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            return new String(cipher.doFinal(Base64.getDecoder()
+                    .decode(strToDecrypt)));
+        } catch (Exception e) {
+            System.out.println("Error while decrypting: " + e.toString());
+        }
+        return null;
     }
 
 }

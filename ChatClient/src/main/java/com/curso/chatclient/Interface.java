@@ -137,6 +137,7 @@ public class Interface {
                     }
                 } catch (ClientException CliExc) {
                     System.out.println(CliExc.getMessage());
+                    System.out.print(">");
                 }
 
             } else {
