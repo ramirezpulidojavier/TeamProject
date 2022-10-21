@@ -146,11 +146,13 @@ public class Client {
             LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
             throw new ClientException("Error reading line.");
         }
-        if (!checkDates(line)) {
-            try {
-                return decrypt(line);
-            } catch (Exception ex) {
-                LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
+        if (line.length() >= 20) {
+            if (!checkDates(line)) {
+                try {
+                    return decrypt(line);
+                } catch (Exception ex) {
+                    LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
+                }
             }
         }
         return line;
