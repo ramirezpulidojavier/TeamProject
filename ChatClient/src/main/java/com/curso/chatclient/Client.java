@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,7 +23,7 @@ import java.util.logging.Logger;
  * @author pcorrales2010
  */
 public class Client {
-
+    
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
@@ -32,7 +34,8 @@ public class Client {
      * variables.
      *
      * @param newSocket
-     * @throws ClientException when an I/O error occurs while creating the output/input stream.
+     * @throws ClientException when an I/O error occurs while creating the
+     * output/input stream.
      */
     public Client(Socket newSocket) throws ClientException {
         LOGGER.setLevel(Level.ALL);
@@ -41,14 +44,14 @@ public class Client {
             mySocket = newSocket;
             InputStream input;
             OutputStream output;
-
+            
             try {
                 output = newSocket.getOutputStream();
             } catch (IOException ex) {
                 LOGGER.log(Level.SEVERE, ex.toString(), ex);
                 throw new ClientException("Error creating the output stream: the socket could not be connected");
             }
-
+            
             try {
                 myWriter = new PrintWriter(output, true);
                 input = mySocket.getInputStream();
@@ -60,7 +63,6 @@ public class Client {
             myReader = new BufferedReader(new InputStreamReader(input));
         }
     }
-
 
     /**
      * Parametrized constructor to inject variables. This constructor is being
@@ -82,7 +84,29 @@ public class Client {
      * @param message The message to send to server
      */
     public void sendMessage(String message) {
+        
         myWriter.println(message);
+
+        //myWriter.println(timeString+" | "+message);
+        //System.out.println(endString);
+    }
+    public String pickFistDigit(String s){
+         LocalDateTime timeNow = LocalDateTime.now();
+         DateTimeFormatter formaterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String timeString = timeNow.format(formaterDate).toString();
+        return timeString.substring(0, 4);
+        
+    }
+
+    public void sendChatMessage(String message) {
+        LocalDateTime timeNow = LocalDateTime.now();
+        DateTimeFormatter formaterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String timeString = timeNow.format(formaterDate).toString();
+        String endString = timeString + "|" + message;
+        //myWriter.println(endString);
+        
+        sendMessage(endString);
+        
     }
 
     /**
@@ -103,5 +127,5 @@ public class Client {
         
         return line;
     }
-
+    
 }
