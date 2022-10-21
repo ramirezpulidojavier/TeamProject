@@ -51,6 +51,10 @@ public class ListenThread extends Thread {
         while (!this.stop) {
             try {
                 System.out.println(client.getMessage());
+                
+//                Bot myBot = new Bot(this.client);
+//                myBot.listeningMessages();
+                
             } catch (ClientException ex) {
                 LOGGER.log(Level.SEVERE, ex.toString(), ex);
             }

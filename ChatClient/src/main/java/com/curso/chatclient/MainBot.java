@@ -11,7 +11,7 @@ import com.curso.exceptions.ClientException;
  * @author juacuadr
  */
 public class MainBot {
-    public static void main(String[] args) throws ClientException {
+    public static void main(String[] args) throws ClientException, InterruptedException {
         Interface menu = new Interface();
         
         // Run for a client

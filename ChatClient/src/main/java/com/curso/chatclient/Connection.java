@@ -30,7 +30,6 @@ public class Connection {
         host = "192.168.3.102";
         port = 2525;
         LOGGER.setLevel(Level.ALL);
-
     }
 
     /**
@@ -53,6 +52,14 @@ public class Connection {
     public Connection(Socket newSocket) {
         mySocket = newSocket;
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public Socket getMySocket() {
+        return mySocket;
+    }
 
     /**
      * This method returns the values of host in the object.
@@ -70,6 +77,14 @@ public class Connection {
      */
     public int getPort() {
         return port;
+    }
+
+    /**
+     * 
+     * @param mySocket 
+     */
+    public void setMySocket(Socket mySocket) {
+        this.mySocket = mySocket;
     }
 
     /**

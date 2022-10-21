@@ -35,6 +35,9 @@ public class Bot {
             String code = decodingMessage(msgReaded);
             String res = "";
 
+            System.out.println("Printing code:");
+            System.out.println(code);
+            
             if (code != null) {
 
                 switch (code) {
@@ -81,11 +84,11 @@ public class Bot {
     }
 
     public String botMenu() {
-        return "ChatBot menu:\n/dumb\n/compatibility\n/deathDate\n/headsOrTails\n";
+        return "ChatBot menu: /dumb /compatibility /deathDate /headsOrTails";
     }
 
     public String dumb() {
-        return "You are " + new Random().nextInt(11) + " dumb on the international dumb scale.\nCongratulations";
+        return "You are " + new Random().nextInt(11) + " dumb on the international dumb scale. Congratulations";
     }
 
     public String compatibility() {

@@ -113,8 +113,11 @@ public class Interface {
      *
      * To end the loop insert 'exit'
      *
+     * @param isClient
+     * @throws com.curso.exceptions.ClientException
+     * @throws java.lang.InterruptedException
      */
-    public void run(int isClient) throws ClientException {
+    public void run(int isClient) throws ClientException, InterruptedException {
         boolean running = true;
 
         // Stablish socket connection
@@ -134,25 +137,25 @@ public class Interface {
             LOGGER.log(Level.SEVERE, e.toString(), e);
         }
 
-        // Initialize new instance of ListenThred name listener
-        try {
-            listener = new ListenThread(mySocket);
-        } catch (ClientException e) {
-            LOGGER.log(Level.SEVERE, e.toString(), e);
-        }
-
         // Client authentication
         logged = runAuthentication(isClient);
 
         // Client run
         if (isClient == 1) {
+            // Initialize new instance of ListenThred name listener
+            try {
+                listener = new ListenThread(mySocket);
+            } catch (ClientException e) {
+                LOGGER.log(Level.SEVERE, e.toString(), e);
+            }
+
             listener.start();
-            
+
             // Initialize a subroutine for sending messages
             entryMessageByUser();
-        }
-        else {
-            // Bot routine
+
+            // Bot run
+        } else {
             Bot myBot = new Bot(sender);
             myBot.listeningMessages();
         }
@@ -167,16 +170,18 @@ public class Interface {
      * and prints the message that gets
      *
      * To end the loop insert 'exit'
+     * @param isClient
+     * @throws java.lang.InterruptedException
      */
-    public boolean runAuthentication(int isClient) {
+    public boolean runAuthentication(int isClient) throws InterruptedException {
         String serverAnswer = "";
         String selectedOption = "";
-        logged = true;
+
         try {
             System.out.println("Welcome to T-Sysgram.");
 
             while (!serverAnswer.equals("true")) {
-                
+
                 // Check if it is a client
                 if (isClient == 1) {
                     System.out.println("Choose an option.\n'exit' for end the application.");
@@ -188,9 +193,8 @@ public class Interface {
                     } catch (NoSuchElementException e) {
                         LOGGER.log(Level.SEVERE, e.toString(), e);
                     }
-                }
-                else {
-                    
+                } else {
+
                     // 2 option if it is a bot
                     selectedOption = "2";
                 }
@@ -200,10 +204,18 @@ public class Interface {
                     case "1" -> {
                         inputUsernamePassword("R", isClient);
                         serverAnswer = sender.getMessage();
+                        
+                        if (serverAnswer.equals("true")) {
+                            logged = true;
+                        }
                     }
                     case "2" -> {
                         inputUsernamePassword("L", isClient);
                         serverAnswer = sender.getMessage();
+                        
+                        if (serverAnswer.equals("true")) {
+                            logged = true;
+                        }
                     }
                     case "exit" -> {
                         serverAnswer = "true";
@@ -224,8 +236,10 @@ public class Interface {
     /**
      *
      * @param mode
+     * @param isClient
+     * @throws java.lang.InterruptedException
      */
-    public void inputUsernamePassword(String mode, int isClient) {
+    public void inputUsernamePassword(String mode, int isClient) throws InterruptedException {
         String username;
         String password;
 
@@ -235,9 +249,12 @@ public class Interface {
             System.out.print("Password: ");
             password = sc.nextLine();
         } else {
+            Thread.sleep(500);
             username = "bot";
+            Thread.sleep(500);
             password = "bot";
         }
+        
 
         sender.sendMessage(mode);
         sender.sendMessage(username + "|" + getSecurePassword(password));

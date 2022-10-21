@@ -47,7 +47,7 @@ public class ConnectionTest {
         Socket clientSocket = newConnection.connect();
         
         // THEN
-        boolean res = newConnection.close(clientSocket);
+        boolean res = newConnection.close();
         
         // EXPECT
         assertEquals(true, res);
