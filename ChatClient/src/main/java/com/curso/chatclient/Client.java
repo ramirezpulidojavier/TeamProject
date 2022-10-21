@@ -31,15 +31,14 @@ public class Client {
 
     // CREATE LOGGER
     // private final Logger LOGGER = Logger.getLogger(Client.class.getName());
-
     Socket mySocket;
     PrintWriter myWriter;
     BufferedReader myReader;
-    
-     private SecretKeySpec secretKey;
+
+    private SecretKeySpec secretKey;
     private String secret = "m93s75&ps3c1";
     private byte[] key;
-    
+
     private final static Logger LOGGERCLIENT = Logger.getLogger(Client.class.getName());
 
     /**
@@ -47,7 +46,8 @@ public class Client {
      * variables.
      *
      * @param newSocket
-     * @throws ClientException when an I/O error occurs while creating the output/input stream.
+     * @throws ClientException when an I/O error occurs while creating the
+     * output/input stream.
      */
     public Client(Socket newSocket) throws ClientException {
         if (newSocket != null) {
@@ -69,14 +69,12 @@ public class Client {
                 LOGGERCLIENT.log(Level.FINE, ex.toString(), ex);
                 // Program logger
                 throw new ClientException("Error creating the input stream: The socket is closed, not connected or the input has been shutdown");
-                
-                
+
             }
-            
+
             myReader = new BufferedReader(new InputStreamReader(input));
         }
     }
-
 
     /**
      * Parametrized constructor to inject variables. This constructor is being
@@ -98,10 +96,9 @@ public class Client {
      * @param message The message to send to server
      */
     public void sendMessage(String message) {
-        
+
         myWriter.println(encrypt(message));
     }
-    
 
     /**
      * Get the message from server
@@ -122,7 +119,7 @@ public class Client {
 
         return decrypt(line);
     }
-    
+
     public void setKey(String myKey) {
         MessageDigest sha = null;
         try {
@@ -135,20 +132,24 @@ public class Client {
             e.printStackTrace();
         }
     }
-    
+
     public String encrypt(String strToEncrypt) {
-        try {
-            setKey(secret);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            return Base64.getEncoder()
-                    .encodeToString(cipher.doFinal(strToEncrypt.getBytes("UTF-8")));
-        } catch (Exception e) {
-            System.out.println("Error while encrypting: " + e.toString());
+        String[] msg = strToEncrypt.split("/secret ");
+
+        if (msg[1] != null) {
+            try {
+                setKey(secret);
+                Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+                return Base64.getEncoder()
+                        .encodeToString(cipher.doFinal(msg[1].getBytes("UTF-8")));
+            } catch (Exception e) {
+                System.out.println("Error while encrypting: " + e.toString());
+            }
         }
-        return null;
+        return strToEncrypt;
     }
-    
+
     public String decrypt(String strToDecrypt) {
         try {
             setKey(secret);

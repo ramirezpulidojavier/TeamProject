@@ -190,8 +190,7 @@ public class Interface {
                         System.out.print("Password: ");
                         password = sc.nextLine();
                         senderReceiver.sendMessage("R");
-                        senderReceiver.sendMessage(username + "|" + getSecurePassword(password));
-                        
+                        senderReceiver.sendMessage(username + "|" + getSecurePassword(password)); 
                         serverAnswer = senderReceiver.getMessage();
                         break;
                     case "2":
