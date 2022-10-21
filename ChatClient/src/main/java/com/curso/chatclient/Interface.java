@@ -11,6 +11,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -33,13 +34,16 @@ public class Interface {
     Connection conct;
     private Scanner sc;
 
+    /**
+     * Default constructor 
+     */
     public Interface() {
         sc = new Scanner(System.in);
         LOGGER.setLevel(Level.ALL);
     }
 
     /**
-     *
+     * Ask for a message and send it to the server until the client insert 'exit'
      */
     public void entryMessageByUser() {
 
@@ -73,8 +77,9 @@ public class Interface {
     }
 
     /**
-     *
-     * @return @throws ClientException
+     * User inserts IP and port and it tries to connect
+     * @return Socket if it connects
+     * @throws ClientException when you cant reach connection, server is not running or the port format is incorrect
      */
     public Socket stablishConnection() throws ClientException {
 
@@ -234,10 +239,10 @@ public class Interface {
     }
 
     /**
-     *
-     * @param mode
-     * @param isClient
-     * @throws java.lang.InterruptedException
+     * Ask for a nickname and a password and sends it to the server
+     * @param mode Character for differentiate Log in from Sign up
+     * @param isClient flag that represents if it a client or the bot
+     * @throws java.lang.InterruptedException when the sleep is interrumpted
      */
     public void inputUsernamePassword(String mode, int isClient) throws InterruptedException {
         String username;
@@ -264,7 +269,7 @@ public class Interface {
      * Get Secure Password that receives a password introduced by an user for
      * hashing the user password.
      *
-     * @param passwordToHash
+     * @param passwordToHash String with the password to hash
      * @return A hashed password
      */
     public String getSecurePassword(String passwordToHash) {
@@ -272,9 +277,7 @@ public class Interface {
         String salt = null;
         try {
             salt = getSalt();
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.log(Level.FINE, e.toString(), e);
-        } catch (NoSuchProviderException e) {
+        } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
             LOGGER.log(Level.FINE, e.toString(), e);
         }
         try {
@@ -302,12 +305,13 @@ public class Interface {
      * This salt is pruposed to add complexity to the key
      *
      * @return A chain of bytes in String type variable.
-     * @throws NoSuchProviderException
+     * @throws java.security.NoSuchAlgorithmException when the arguments for the hashing are incorrect
+     * @throws NoSuchProviderException when the arguments for the hashing are incorrect
      */
     public String getSalt() throws NoSuchAlgorithmException, NoSuchProviderException {
         SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
         byte[] salt = new byte[16];
         sr.nextBytes(salt);
-        return salt.toString();
+        return Arrays.toString(salt);
     }
 }

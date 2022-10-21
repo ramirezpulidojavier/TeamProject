@@ -35,8 +35,8 @@ public class Connection {
     /**
      * Constructor to change values of host and port.
      *
-     * @param host.
-     * @param port.
+     * @param host Server IP    
+     * @param port Server port
      */
     public Connection(String host, int port) {
         this.host = host;
@@ -47,15 +47,15 @@ public class Connection {
     /**
      * Constructor to creare a new object given a socket .
      *
-     * @param newSocket .
+     * @param newSocket Existing socket that will be used for the connection
      */
     public Connection(Socket newSocket) {
         mySocket = newSocket;
     }
     
     /**
-     * 
-     * @return 
+     * Getter of the socket attribute 
+     * @return Socket of the current connection
      */
     public Socket getMySocket() {
         return mySocket;
@@ -64,7 +64,7 @@ public class Connection {
     /**
      * This method returns the values of host in the object.
      *
-     * @return host of the object.
+     * @return host of the current object.
      */
     public String getHost() {
         return host;
@@ -80,8 +80,8 @@ public class Connection {
     }
 
     /**
-     * 
-     * @param mySocket 
+     * Setter of the socket attribute
+     * @param mySocket Socket to be assigned to the socket of the current object
      */
     public void setMySocket(Socket mySocket) {
         this.mySocket = mySocket;
@@ -107,7 +107,7 @@ public class Connection {
     }
 
     /**
-     *
+     * Closes the socket connection with the server
      * @return true if the socket was able to be closed.
      */
     public boolean close() {

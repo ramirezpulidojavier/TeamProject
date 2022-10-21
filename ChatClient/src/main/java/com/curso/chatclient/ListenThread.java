@@ -25,8 +25,8 @@ public class ListenThread extends Thread {
      * ListenThread constructor.It receives a socket of a new Client who is
      * connected.
      *
-     * @param soc
-     * @throws com.curso.exceptions.ClientException
+     * @param soc Socket used to create a new client 
+     * @throws com.curso.exceptions.ClientException when an error occurs while creating a new client
      */
     public ListenThread(Socket soc) throws ClientException {
         this.client = new Client(soc);
@@ -50,10 +50,17 @@ public class ListenThread extends Thread {
 
         while (!this.stop) {
             try {
-                System.out.println(client.getMessage());
+                String message = client.getMessage();
                 
-//                Bot myBot = new Bot(this.client);
-//                myBot.listeningMessages();
+                if (message == null) {
+                    System.out.println("You have been banned. Type 'exit' for stop chatting");
+                    stopThread();
+                    this.interrupt();
+                    
+                }else{
+                    System.out.println(message);
+                }
+                
                 
             } catch (ClientException ex) {
                 LOGGER.log(Level.SEVERE, ex.toString(), ex);

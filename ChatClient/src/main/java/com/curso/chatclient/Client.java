@@ -66,9 +66,9 @@ public class Client {
      * Parametrized constructor to inject variables. This constructor is being
      * used into Test files.
      *
-     * @param newSocket
-     * @param newWriter
-     * @param newReader
+     * @param newSocket Socket to be assigned to the current object's socket 
+     * @param newWriter PrintWriter to be assigned to the current object's newWriter 
+     * @param newReader BufferedReader to be assigned to the current object's newReader 
      */
     public Client(Socket newSocket, PrintWriter newWriter, BufferedReader newReader) {
         mySocket = newSocket;
