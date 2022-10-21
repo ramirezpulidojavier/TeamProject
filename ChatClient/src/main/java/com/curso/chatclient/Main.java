@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException, ClientException {
+    public static void main(String[] args) throws IOException, ClientException, InterruptedException {
         Interface menu = new Interface();
         
         // Run for a client
