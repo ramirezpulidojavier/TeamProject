@@ -147,7 +147,7 @@ public class Client {
             throw new ClientException("Error reading line.");
         }
         if (line.length() >= 20) {
-            if (!checkDates(line)) {
+            if (checkDates(line)) {
                 try {
                     return decrypt(line);
                 } catch (Exception ex) {

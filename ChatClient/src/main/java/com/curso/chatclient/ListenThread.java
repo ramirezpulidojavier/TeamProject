@@ -51,6 +51,7 @@ public class ListenThread extends Thread {
 
         while (!this.stop) {
             try {
+                System.out.println("probando");
                 System.out.println(client.getMessage());
                 
 //                Bot myBot = new Bot(this.client);
